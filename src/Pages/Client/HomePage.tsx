@@ -1,9 +1,13 @@
-import { Box } from "@mui/material";
+import { Box, Typography, Button, Container } from "@mui/material";
 
-const HomePage = () =>
-{
-    return (
-        <Box>Home Page</Box>
-    )
-}
+import BannerHomePage from "../../Component/Client/BannerHomePage";
+
+const HomePage = () => {
+  return (
+    <Box>
+        <BannerHomePage/>
+    </Box>
+  );
+};
+
 export default HomePage;

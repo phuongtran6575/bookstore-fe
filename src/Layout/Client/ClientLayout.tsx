@@ -1,6 +1,7 @@
 import { Box, Toolbar } from "@mui/material"
 import Header from "../../Component/Client/Header"
 import { Outlet } from "react-router-dom"
+import Footer from "../../Component/Client/Footer"
 
 const ClientLayout = () => {
     return (
@@ -9,6 +10,7 @@ const ClientLayout = () => {
           <Box sx={{ }}>
             <Outlet />   
           </Box>
+          <Footer/>
       </Box>
     )
   }

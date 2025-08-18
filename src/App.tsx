@@ -10,6 +10,12 @@ import OrderListPage  from './Pages/Admin/OrderListPage'
 import CustomerListPage  from './Pages/Admin/CustomerListPage'
 import  SettingPage  from './Pages/Admin/SettingPage'
 import DashboardPage from './Pages/Admin/DashboardPage'
+import ClientLayout from './Layout/Client/ClientLayout'
+import HomePage from './Pages/Client/HomePage'
+import CategoryPage from './Pages/Client/CategoryPage'
+import AuthLayout from './Layout/Client/AuthLayout'
+import LoginPage from './Pages/Auth/LoginPage'
+import RegisterPage from './Pages/Auth/RegisterPage'
 
 
 
@@ -19,7 +25,16 @@ function App() {
     <BrowserRouter>
       <Box>
         <Routes>
-          
+         <Route path='/' element={<ClientLayout/>}>
+            <Route index element={<HomePage/>}></Route>
+            <Route path='home' element={<HomePage/>}></Route>
+            <Route path='category' element={<CategoryPage/>}></Route>
+            <Route path='auth' element={<AuthLayout/>}>
+              <Route index element={<LoginPage/>}></Route>
+              <Route path='login' element={<LoginPage/>}></Route>
+              <Route path='register' element={<RegisterPage/>}></Route>
+            </Route>
+         </Route>
          <Route path='/admin' element = {<AdminLayout/>}>
             <Route index element={<DashboardPage/>}></Route>
             <Route path='dashboard' element={<DashboardPage/>}></Route>

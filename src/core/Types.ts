@@ -8,7 +8,11 @@ export interface Book{
 
 export interface Category{
     id: number
+    slug: string
     name: string
+    amount: number
+    
+    
 }
 
 export interface Customer{

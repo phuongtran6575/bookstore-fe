@@ -1,10 +1,10 @@
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 
 const OrderListPage = () => {
   return (
     <Box> 
-        Order List Page
+        <Typography variant='h6' sx={{ fontWeight: "bold", mb: 2 }}>Order List Page</Typography>
     </Box>
   )
 }

@@ -40,7 +40,7 @@ const AdminSidebar = () => {
             BookStore
         </Toolbar>
         
-        <Divider sx={{}} />
+        <Divider sx={{bgcolor: "white"}} />
         <List>
           {
             navlLinks.map(links =>(

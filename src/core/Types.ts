@@ -20,3 +20,12 @@ export interface Customer{
     name: string
     Budget: number
 }
+
+export interface Address {
+    id: string;
+    name: string;
+    phone: string;
+    street: string;
+    city: string;
+    isDefault: boolean;
+}

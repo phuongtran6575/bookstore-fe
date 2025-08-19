@@ -5,7 +5,7 @@ import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
 
 const AccountDashboard = () => {
   return (
-    <Box p={3} bgcolor="#f9fbfd" minHeight="100vh">
+    <Box p={3} bgcolor="#f9fbfd" >
       {/* Header */}
       <Box mb={3}>
         <Typography variant="h5" fontWeight="bold">

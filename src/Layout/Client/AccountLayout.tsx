@@ -5,9 +5,9 @@ import { Outlet } from 'react-router-dom';
 
 const AccountLayout = () => {
   return (
-    <Box sx={{display:"flex", gap:4, mt: 3}}>
+    <Box sx={{display:"flex", justifyContent:"center", gap:4, mt: 3}}>
         <AccountSidebar/>
-        <Box>
+        <Box sx={{width:"60%",backgroundColor:"white", borderRadius: 2, boxShadow: 1, p: 2, }}>
             <Outlet/>
         </Box>
     </Box>

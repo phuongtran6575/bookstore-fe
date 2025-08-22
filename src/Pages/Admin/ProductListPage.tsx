@@ -1,33 +1,21 @@
 import { Box, FormControl, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import type { Book } from '../../core/Types'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid'
 import SearchIcon from "@mui/icons-material/Search";
+import axios from 'axios';
 
 const ProductListPage = () => {
-  const listBook: Book[] = [
-    {
-            id: 1,
-            name: "Book 1",
-            price: 10000,
-            category: "Category 1",
-            action: true
-        },
-        {
-            id: 2,
-            name: "Book 2",
-            price: 20000,
-            category: "Category 2",
-            action: false
-        },
-        {
-            id: 3,
-            name: "Book 3",
-            price: 30000,
-            category: "Category 3",
-            action: true
-        }
-  ]
+  const [books, setBooks] = useState<Book[]>([])
+    
+  const fetchBooks =() =>{
+    axios.get(`bookstoe.com`).then(response => {setBooks(response.data)}).catch(e => console.log(e))
+  }
+
+  useEffect(() => {
+    fetchBooks()
+  }, [])
+  
 
     const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 200 },
@@ -63,7 +51,7 @@ const ProductListPage = () => {
             </FormControl>
             </Box>
           <DataGrid
-            rows={listBook}
+            rows={books}
             columns={columns}
             pageSizeOptions={[5, 10]}
             disableColumnMenu

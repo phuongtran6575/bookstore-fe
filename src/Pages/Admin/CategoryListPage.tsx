@@ -1,21 +1,19 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import type { Category } from '../../core/Types';
+import axios from 'axios';
 
 const CategoryListPage = () => {
-  const listCategory: Category[] = [{
-    id: 1,
-    slug: "novel",
-    name: "Tiểu thuyết",
-    amount: 10,
-  },
-  {
-    id: 2,
-    slug: "comic",
-    name: "Truyện tranh",
-    amount: 20,
-  }]
+  const [categories, setCategories] = useState<Category[]>([])
+  const fetchCategories = () => {
+    axios.get(``).then(response =>{
+      setCategories(response.data)
+    }).catch(e => console.log(e))
+  }
+  useEffect(() =>{
+    fetchCategories
+  }, [])
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 200 },
     { field: 'slug', headerName: 'Slug', width: 200 },
@@ -55,7 +53,7 @@ const CategoryListPage = () => {
           </Box>
           <Box sx={{backgroundColor:"white", p:3, border: "1px solid #e5e7eb", borderRadius: 2}}>
             <DataGrid
-              rows={listCategory}
+              rows={categories}
               columns={columns}
               pageSizeOptions={[5, 10]}
               disableColumnMenu

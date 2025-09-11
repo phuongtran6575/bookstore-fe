@@ -3,11 +3,11 @@ import './App.css'
 import { Box } from '@mui/material'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import  AdminLayout from './Layout/Admin/AdminLayout'
-import ProductListPage from './Pages/Admin/ProductListPage'
-import ProductEditPage from './Pages/Admin/ProductEditPage'
-import CategoryListPage from './Pages/Admin/CategoryListPage'
-import OrderListPage  from './Pages/Admin/OrderListPage'
-import CustomerListPage  from './Pages/Admin/CustomerListPage'
+import ProductListPage from './Pages/Admin/Product/ProductListPage'
+import ProductEditPage from './Pages/Admin/Product/ProductAddPage'
+import CategoryListPage from './Pages/Admin/Category/CategoryListPage'
+import OrderListPage  from './Pages/Admin/Order/OrderListPage'
+import CustomerListPage  from './Pages/Admin/Customer/CustomerListPage'
 import  SettingPage  from './Pages/Admin/SettingPage'
 import DashboardPage from './Pages/Admin/DashboardPage'
 import ClientLayout from './Layout/Client/ClientLayout'
@@ -22,6 +22,7 @@ import ProfilePage from './Pages/Account/ProfilePage'
 import AddressBookPage from './Pages/Account/AddressBookPage'
 import OrderDetailPage from './Pages/Account/OrderDetailPage'
 import OrderHistoryPage from './Pages/Account/OrderHistoryPage'
+import ProductDetailandEditPage from './Pages/Admin/Product/ProductDetaiandEditlPage'
 
 
 
@@ -53,7 +54,8 @@ function App() {
             <Route index element={<DashboardPage/>}></Route>
             <Route path='dashboard' element={<DashboardPage/>}></Route>
             <Route path='products' element={<ProductListPage/>}></Route>
-            <Route path='productEdit' element={<ProductEditPage/>}></Route>
+            <Route path='productAdd' element={<ProductEditPage/>}></Route>
+            <Route path='productDetailandEdit/:id' element={<ProductDetailandEditPage/>}></Route>
             <Route path='categories' element={<CategoryListPage/>}></Route>
             <Route path='orders' element={<OrderListPage/>}></Route>
             <Route path='customers' element={<CustomerListPage/>}></Route>

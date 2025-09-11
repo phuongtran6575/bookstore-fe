@@ -1,8 +1,7 @@
 import { Box, InputAdornment, TextField, Typography } from '@mui/material'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid'
 import SearchIcon from "@mui/icons-material/Search";
-import React from 'react'
-import type { Customer } from '../../core/Types';
+import type { Customer } from '../../../core/Types';
 
 const CustomerListPage = () => {
   const listCustomer: Customer[] = [

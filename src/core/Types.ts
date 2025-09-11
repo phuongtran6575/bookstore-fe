@@ -1,9 +1,16 @@
 export interface Book{
-    id: number
-    name: string
+    id: string
+    title: string
+    description: string
+    sku: string
     price: number
-    category: string
-    action: boolean
+    sale_price: number
+    stock_quantity: number
+    page_count: number
+    cover_type: number
+    publication_date: Date
+    created_at: Date
+    updated_at: Date
 }
 
 export interface Category{

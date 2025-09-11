@@ -1,19 +1,12 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react'
-import type { Category } from '../../core/Types';
-import axios from 'axios';
+import type { Category } from '../../../core/Types';
 
 const CategoryListPage = () => {
   const [categories, setCategories] = useState<Category[]>([])
-  const fetchCategories = () => {
-    axios.get(``).then(response =>{
-      setCategories(response.data)
-    }).catch(e => console.log(e))
-  }
-  useEffect(() =>{
-    fetchCategories
-  }, [])
+  
+  
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 200 },
     { field: 'slug', headerName: 'Slug', width: 200 },

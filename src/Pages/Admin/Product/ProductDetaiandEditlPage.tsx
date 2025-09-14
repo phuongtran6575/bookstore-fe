@@ -1,10 +1,10 @@
 import { Box,  TextField, Typography } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
-import { useBookbyId } from '../../../api/hook/useBook';
+import { useGetBookbyId } from '../../../api/hook/useBook';
 const ProductDetailandEditPage = () => {
   const { id } = useParams<{ id: string }>(); 
   if (!id) return <p>No product selected</p>;
-  const { data: book, isLoading, error } = useBookbyId(id);
+  const { data: book, isLoading, error } = useGetBookbyId(id);
 
   if (!id) return <p>No user selected</p>;
   if (isLoading) return <p>Loading user...</p>;
@@ -14,7 +14,7 @@ const ProductDetailandEditPage = () => {
     <Box p={3}>
       {/* Quay lại */}
       <Typography color="warning.main" sx={{ cursor: "pointer", mb: 2 }}>
-       <Link to="/admin/products">← Quay lại danh sách sản phẩm</Link>
+       <Link to="/admin/books">← Quay lại danh sách sản phẩm</Link>
       </Typography>
       {/* Tiêu đề */}
       <Typography variant="h5" fontWeight="bold" mb={3}>

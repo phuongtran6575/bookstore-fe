@@ -5,9 +5,8 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import  AdminLayout from './Layout/Admin/AdminLayout'
 import ProductListPage from './Pages/Admin/Product/ProductListPage'
 import ProductEditPage from './Pages/Admin/Product/ProductAddPage'
-import CategoryListPage from './Pages/Admin/Category/CategoryListPage'
+import CategoryListPage from './Pages/Admin/Ultility/CategoryListPage'
 import OrderListPage  from './Pages/Admin/Order/OrderListPage'
-import CustomerListPage  from './Pages/Admin/Customer/CustomerListPage'
 import  SettingPage  from './Pages/Admin/SettingPage'
 import DashboardPage from './Pages/Admin/DashboardPage'
 import ClientLayout from './Layout/Client/ClientLayout'
@@ -23,6 +22,7 @@ import AddressBookPage from './Pages/Account/AddressBookPage'
 import OrderDetailPage from './Pages/Account/OrderDetailPage'
 import OrderHistoryPage from './Pages/Account/OrderHistoryPage'
 import ProductDetailandEditPage from './Pages/Admin/Product/ProductDetaiandEditlPage'
+import UserListPage from './Pages/Admin/Customer/UserListPage'
 
 
 
@@ -53,12 +53,12 @@ function App() {
          <Route path='/admin' element = {<AdminLayout/>}>
             <Route index element={<DashboardPage/>}></Route>
             <Route path='dashboard' element={<DashboardPage/>}></Route>
-            <Route path='products' element={<ProductListPage/>}></Route>
+            <Route path='books' element={<ProductListPage/>}></Route>
             <Route path='productAdd' element={<ProductEditPage/>}></Route>
             <Route path='productDetailandEdit/:id' element={<ProductDetailandEditPage/>}></Route>
             <Route path='categories' element={<CategoryListPage/>}></Route>
             <Route path='orders' element={<OrderListPage/>}></Route>
-            <Route path='customers' element={<CustomerListPage/>}></Route>
+            <Route path='customers' element={<UserListPage/>}></Route>
             <Route path='setting' element={<SettingPage/>}></Route>
           </Route>
         </Routes>      

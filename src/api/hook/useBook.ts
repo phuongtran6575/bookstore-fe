@@ -3,14 +3,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { bookService } from "../service/productService";
 import type { Book } from "../../core/Types";
 
-export const useBooks = () => {
+export const useGetListBooks = () => {
   return useQuery({
     queryKey: ["books"],
     queryFn: bookService.getAll,
   });
 };
 
-export const useBookbyId = (id:string) =>{
+export const useGetBookbyId = (id:string) =>{
     return useQuery({
         queryKey: ["book", id],   // cache riêng cho từng id
         queryFn: () => bookService.getById(id),

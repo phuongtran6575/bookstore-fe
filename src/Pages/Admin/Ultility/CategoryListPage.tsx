@@ -1,32 +1,34 @@
-import { Box, Button, IconButton, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material'
-import { DataGrid, type GridColDef } from '@mui/x-data-grid'
-import SearchIcon from "@mui/icons-material/Search";
-import { useGetListBooks, useDeleteBook } from '../../../api/hook/useBook';
+import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
+
+import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import { Link, useNavigate } from 'react-router-dom';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-const ProductListPage = () => {
-  const navigate = useNavigate();
-  const { data: books, isLoading, error } = useGetListBooks();
-  const deleteBook = useDeleteBook();
+import SearchIcon from "@mui/icons-material/Search";
+import { useCategoryCrud } from '../../../api/hook/useUltility';
+
+const CategoryListPage = () => {
+    const { useGetListsCategories } = useCategoryCrud();
+
+  const { data: categories = [], isLoading, error } = useGetListsCategories();
 
   if (isLoading) return <p>Loading books...</p>;
   if (error) return <p>Error loading books</p>;
 
   const handleEdit = (id: string) => {
-    navigate(`/admin/productDetailandEdit/${id}`);
+    //navigate(`/admin/productDetailandEdit/${id}`);
     console.log("Edit product", id)
   
   };
   const handleRead = (id: string) => {
-    navigate(`/admin/productDetailandEdit/${id}`);
+    //navigate(`/admin/productDetailandEdit/${id}`);
     console.log("Add product", id)
     
   };
 
   const handleDelete = (id: string) => {
-    deleteBook.mutate(id);
+    //deleteBook.mutate(id);
     console.log("delete product", id)
     
   };
@@ -34,11 +36,9 @@ const ProductListPage = () => {
 
 
     const columns: GridColDef[] = [
-    { field: 'sku', headerName: 'SKU', width: 100 },
-    { field: 'title', headerName: 'Title', width: 200 },
-    { field: 'price', headerName: 'Price', width: 120 },
-    { field: 'sale_price', headerName: 'Sale Price', width: 120 },
-    { field: 'stock_quantity', headerName: 'Stock', width: 100 },
+    { field: 'name', headerName: 'Name', width: 100 },
+    { field: 'slug', headerName: 'Slug', width: 100 },
+    { field: 'parent_id', headerName: 'Price', width: 100 },
     {
       field: "edit",
       headerName: "Edit",
@@ -94,10 +94,10 @@ const ProductListPage = () => {
                       ),
                     },
                   }}/>
-              <Button  component={Link} to="/admin/productAdd" variant="contained" color="warning"> + Thêm sản phẩm </Button>
+              <Button  component={Link} to="/admin/productAdd" variant="contained" color="warning"> + Thêm danh mục</Button>
             </Box>
           <DataGrid
-            rows={books}
+            rows={categories}
             filterMode="server"
             columns={columns}
             pageSizeOptions={[5, 10]}
@@ -120,4 +120,5 @@ const ProductListPage = () => {
   )
 }
 
-export default ProductListPage
+export default CategoryListPage
+

@@ -1,7 +1,7 @@
 import { Box,  TextField, Typography } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
 import { useGetBookbyId } from '../../../api/hook/useBook';
-const ProductDetailandEditPage = () => {
+const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>(); 
   if (!id) return <p>No product selected</p>;
   const { data: book, isLoading, error } = useGetBookbyId(id);
@@ -40,4 +40,4 @@ const ProductDetailandEditPage = () => {
   )
 }
 
-export default ProductDetailandEditPage
+export default ProductDetailPage

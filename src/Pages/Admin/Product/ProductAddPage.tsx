@@ -4,7 +4,7 @@ import { useCreateBook } from "../../../api/hook/useBook";
 import { useState } from "react";
 import type {  BookCreate } from "../../../core/Types";
 
-const ProductEditPage = () => {
+const ProductAddPage = () => {
   const navigate = useNavigate();
   const createBook = useCreateBook();
   const [formData, setFormData] = useState<BookCreate>({
@@ -80,4 +80,4 @@ const ProductEditPage = () => {
   );
 };
 
-export default ProductEditPage;
+export default ProductAddPage;

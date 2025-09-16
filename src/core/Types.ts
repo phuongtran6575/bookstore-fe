@@ -48,8 +48,17 @@ export interface Tag{
 
 export interface User{
     id: string
-    name: string
-    Budget: number
+    full_name: string
+    email: string
+    phone_number: string
+    created_at: Date
+    updated_at: Date
+}
+export interface UserCreate{
+    full_name: string
+    email: string
+    password_hash: string
+    phone_number: string
 }
 
 export interface Role{

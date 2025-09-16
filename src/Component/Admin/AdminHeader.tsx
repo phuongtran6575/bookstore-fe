@@ -1,20 +1,24 @@
 import {
-  AppBar, Toolbar, IconButton, Typography, Box, Avatar, Badge
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Badge,
+  Box,
+  Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-interface AdminHeaderProps {
-  open: boolean;
-  onToggle: () => void;
-}
+import { useSidebarStore } from "../../core/store/sidebarStore";
 
 const drawerWidth = 240;
 const miniWidth = 56;
 
-const AdminHeader = ({ open, onToggle }: AdminHeaderProps) => {
+const AdminHeader = () => {
+  const { open, toggle } = useSidebarStore();
+
   return (
     <AppBar
       position="fixed"
@@ -29,12 +33,12 @@ const AdminHeader = ({ open, onToggle }: AdminHeaderProps) => {
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        {/* Nút toggle sidebar */}
-        <IconButton color="inherit" edge="start" onClick={onToggle} sx={{ mr: 2 }}>
+        {/* Toggle sidebar */}
+        <IconButton color="inherit" edge="start" onClick={toggle} sx={{ mr: 2 }}>
           <MenuIcon />
         </IconButton>
 
-        {/* Bên phải */}
+        {/* Right section */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <IconButton color="inherit">
             <Badge color="error" variant="dot">

@@ -1,18 +1,25 @@
 import {
-  Drawer, Toolbar, Divider, List, ListItemButton,
-  ListItemIcon, ListItemText, Collapse, Tooltip
+  Drawer,
+  Toolbar,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+  Collapse,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import BookIcon from "@mui/icons-material/MenuBook";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import PeopleIcon from "@mui/icons-material/People";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import SettingsIcon from "@mui/icons-material/Settings";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import PeopleIcon from "@mui/icons-material/People";
+import BookIcon from "@mui/icons-material/Book";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { useSidebarStore } from "../../core/store/sidebarStore";
 
 const drawerWidth = 240;
 const miniWidth = 56;
@@ -25,26 +32,28 @@ const navLinks = [
     children: [
       { name: "Category", link: "/admin/categories" },
       { name: "Author", link: "/admin/authors" },
-      { name: "Tag", link: "/admin/Tags" },
-      { name: "Pbulisher", link: "/admin/Publishers" },
+      { name: "Tag", link: "/admin/tags" },
+      { name: "Publisher", link: "/admin/publishers" },
     ],
   },
   { name: "Orders", link: "/admin/orders", icon: <ShoppingCartIcon /> },
-  { name: "Customers", link: "/admin/customers", icon: <PeopleIcon /> },
-  { name: "Products", link: "/admin/books", icon: <BookIcon/> },
+  { name: "Authorizaion",  
+    icon: <PeopleIcon />, 
+    children: [
+      { name: "User", link: "/admin/users" },
+      { name: "Role", link: "/admin/roles" },
+    
+    ], },
+  { name: "Products", link: "/admin/books", icon: <BookIcon /> },
   { name: "Setting", link: "/admin/setting", icon: <SettingsIcon /> },
 ];
 
-interface AdminSidebarProps {
-  open: boolean;
-}
-
-const AdminSidebar = ({ open }: AdminSidebarProps) => {
+const AdminSidebar = () => {
+  const { open } = useSidebarStore();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
 
   const handleToggle = (name: string) => {
     setOpenMenu(openMenu === name ? null : name);
-    
   };
 
   return (

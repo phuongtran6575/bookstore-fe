@@ -1,34 +1,34 @@
-import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
-import { DataGrid, type GridColDef } from '@mui/x-data-grid';
-
-import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import SearchIcon from "@mui/icons-material/Search";
-import { useCategoryCrud } from '../../../api/hook/useUltility';
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
+import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRoleCrud } from '../../../api/hook/useUser';
 
-const CategoryListPage = () => {
-    const { useGetListsCategories } = useCategoryCrud();
-
-  const { data: categories = [], isLoading, error } = useGetListsCategories();
+const RoleListPage = () => {
+    const { useGetListRoles, useDeleteRole } = useRoleCrud();
+    const deleteRole = useDeleteRole();
+  const navigate = useNavigate()
+  const { data: roles = [], isLoading, error } = useGetListRoles();
 
   if (isLoading) return <p>Loading books...</p>;
   if (error) return <p>Error loading books</p>;
 
   const handleEdit = (id: string) => {
-    //navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/roleEdit/${id}`);
     console.log("Edit product", id)
   
   };
   const handleRead = (id: string) => {
-    //navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/roleDetail/${id}`);
     console.log("Add product", id)
     
   };
 
   const handleDelete = (id: string) => {
-    //deleteBook.mutate(id);
+    deleteRole.mutate(id);
     console.log("delete product", id)
     
   };
@@ -37,8 +37,6 @@ const CategoryListPage = () => {
 
     const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', flex:1 },
-    { field: 'slug', headerName: 'Slug', flex: 1 },
-    { field: 'parent_id', headerName: 'Price', flex: 1 },
     {
       field: "edit",
       headerName: "Edit",
@@ -94,10 +92,10 @@ const CategoryListPage = () => {
                       ),
                     },
                   }}/>
-              <Button  component={Link} to="/admin/productAdd" variant="contained" color="warning"> + Thêm danh mục</Button>
+              <Button  component={Link} to="/admin/roleAdd" variant="contained" color="warning"> + Thêm danh mục</Button>
             </Box>
           <DataGrid
-            rows={categories}
+            rows={roles}
             filterMode="server"
             columns={columns}
             pageSizeOptions={[5, 10]}
@@ -120,5 +118,4 @@ const CategoryListPage = () => {
   )
 }
 
-export default CategoryListPage
-
+export default RoleListPage

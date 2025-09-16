@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Box, Button, IconButton, InputAdornment,  TextField, Typography } from '@mui/material'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid'
 import SearchIcon from "@mui/icons-material/Search";
 import { useGetListBooks, useDeleteBook } from '../../../api/hook/useBook';
@@ -15,12 +15,12 @@ const ProductListPage = () => {
   if (error) return <p>Error loading books</p>;
 
   const handleEdit = (id: string) => {
-    navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/productEdit/${id}`);
     console.log("Edit product", id)
   
   };
   const handleRead = (id: string) => {
-    navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/productDetail/${id}`);
     console.log("Add product", id)
     
   };
@@ -34,11 +34,11 @@ const ProductListPage = () => {
 
 
     const columns: GridColDef[] = [
-    { field: 'sku', headerName: 'SKU', width: 100 },
-    { field: 'title', headerName: 'Title', width: 200 },
-    { field: 'price', headerName: 'Price', width: 120 },
-    { field: 'sale_price', headerName: 'Sale Price', width: 120 },
-    { field: 'stock_quantity', headerName: 'Stock', width: 100 },
+    { field: 'sku', headerName: 'SKU', flex: 1},
+    { field: 'title', headerName: 'Title', flex: 1 },
+    { field: 'price', headerName: 'Price', flex: 1 },
+    { field: 'sale_price', headerName: 'Sale Price', flex: 1 },
+    { field: 'stock_quantity', headerName: 'Stock', flex: 1 },
     {
       field: "edit",
       headerName: "Edit",

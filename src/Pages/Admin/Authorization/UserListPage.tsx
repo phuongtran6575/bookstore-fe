@@ -1,34 +1,34 @@
-import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
-import { DataGrid, type GridColDef } from '@mui/x-data-grid';
-
-import { Link, useNavigate } from 'react-router-dom';
-import EditIcon from '@mui/icons-material/Edit';
+import { Box, Button, IconButton, InputAdornment,  TextField, Typography } from "@mui/material";
+import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import SearchIcon from "@mui/icons-material/Search";
-import { useCategoryCrud } from '../../../api/hook/useUltility';
+import EditIcon from '@mui/icons-material/Edit';
+import { Link, useNavigate } from "react-router-dom";
+import { useUserCrud } from "../../../api/hook/useUser";
 
-const CategoryListPage = () => {
-    const { useGetListsCategories } = useCategoryCrud();
-
-  const { data: categories = [], isLoading, error } = useGetListsCategories();
+const UserListPage = () => {
+  const { useGetListUser, useDeleteUser } = useUserCrud();
+  const navigate = useNavigate()
+  const { data: users = [], isLoading, error } = useGetListUser();
+  const deleteUser = useDeleteUser();
 
   if (isLoading) return <p>Loading books...</p>;
   if (error) return <p>Error loading books</p>;
 
   const handleEdit = (id: string) => {
-    //navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/userEdit/${id}`);
     console.log("Edit product", id)
   
   };
   const handleRead = (id: string) => {
-    //navigate(`/admin/productDetailandEdit/${id}`);
-    console.log("Add product", id)
+    navigate(`/admin/userDetail/${id}`);
+    console.log("Read product", id)
     
   };
 
   const handleDelete = (id: string) => {
-    //deleteBook.mutate(id);
+    deleteUser.mutate(id);
     console.log("delete product", id)
     
   };
@@ -36,9 +36,9 @@ const CategoryListPage = () => {
 
 
     const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Name', flex:1 },
-    { field: 'slug', headerName: 'Slug', flex: 1 },
-    { field: 'parent_id', headerName: 'Price', flex: 1 },
+    { field: 'full_name', headerName: 'Name', flex:1 },
+    { field: 'email', headerName: 'Email', flex: 1 },
+    { field: 'phone_number', headerName: 'Phone', flex: 1 },
     {
       field: "edit",
       headerName: "Edit",
@@ -94,10 +94,11 @@ const CategoryListPage = () => {
                       ),
                     },
                   }}/>
-              <Button  component={Link} to="/admin/productAdd" variant="contained" color="warning"> + Thêm danh mục</Button>
+              <Button  component={Link} to="/admin/userAdd" variant="contained" color="warning"> + Thêm danh mục</Button>
             </Box>
           <DataGrid
-            rows={categories}
+            rows={users}
+            loading={isLoading}
             filterMode="server"
             columns={columns}
             pageSizeOptions={[5, 10]}
@@ -120,5 +121,4 @@ const CategoryListPage = () => {
   )
 }
 
-export default CategoryListPage
-
+export default UserListPage

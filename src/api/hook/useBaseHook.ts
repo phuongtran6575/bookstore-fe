@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Service } from "../service/baseService";
+import {  type crudService, type RelationshipService } from "../service/baseService";
 
-export function useCrud<T>(entity: string, service: Service<T>) {
+export function useCrud<T>(entity: string, service: crudService<T>) {
   const queryClient = useQueryClient();
-
+  
   const useGetList = () =>
     useQuery({
       queryKey: [entity],
@@ -37,4 +37,38 @@ export function useCrud<T>(entity: string, service: Service<T>) {
     });
 
   return { useGetList, useGetById, useCreate, useUpdate, useDelete };
+}
+
+export function useRelationship<TLeft, TRight, TReturn = any>(
+  key: string,
+  service: RelationshipService<TLeft, TRight, TReturn>
+) {
+  const queryClient = useQueryClient();
+
+  const useGetAll = (leftId: TLeft) =>
+    useQuery({
+      queryKey: [key, leftId],
+      queryFn: () => service.getAll(leftId),
+      enabled: !!leftId,
+    });
+
+  const useAdd = () =>
+    useMutation({
+      mutationFn: ({ leftId, rightId }: { leftId: TLeft; rightId: TRight }) =>
+        service.add(leftId, rightId),
+      onSuccess: (_data, variables) => {
+        queryClient.invalidateQueries({ queryKey: [key, variables.leftId] });
+      },
+    });
+
+  const useRemove = () =>
+    useMutation({
+      mutationFn: ({ leftId, rightId }: { leftId: TLeft; rightId: TRight }) =>
+        service.remove(leftId, rightId),
+      onSuccess: (_data, variables) => {
+        queryClient.invalidateQueries({ queryKey: [key, variables.leftId] });
+      },
+    });
+
+  return { useGetAll, useAdd, useRemove };
 }

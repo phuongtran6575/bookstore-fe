@@ -31,6 +31,9 @@ import UserEditPage from './Pages/Admin/Authorization/UserEditPage'
 import RoleEditPage from './Pages/Admin/Authorization/RoleEditPage'
 import ProductDetailPage from './Pages/Admin/Product/ProductDetailPage'
 import ProductEditPage from './Pages/Admin/Product/ProductEditPage'
+import AuthorListPage from './Pages/Admin/Ultility/AuthorListPage'
+import PublisherListPage from './Pages/Admin/Ultility/PublisherListPage'
+import TagListPage from './Pages/Admin/Ultility/TagListPage'
 
 
 
@@ -61,20 +64,28 @@ function App() {
          <Route path='/admin' element = {<AdminLayout/>}>
             <Route index element={<DashboardPage/>}></Route>
             <Route path='dashboard' element={<DashboardPage/>}></Route>
+            
             <Route path='books' element={<ProductListPage/>}></Route>
             <Route path='productAdd' element={<ProductAddPage/>}></Route>
             <Route path='productDetail/:id' element={<ProductDetailPage/>}></Route>
+            <Route path='productEdit/:id' element={<ProductEditPage/>}></Route>
+            
             <Route path='categories' element={<CategoryListPage/>}></Route>
+            <Route path='authors' element={<AuthorListPage/>}></Route>
+            <Route path='publishers' element={<PublisherListPage/>}></Route>
+            <Route path='tags' element={<TagListPage/>}></Route>
             <Route path='orders' element={<OrderListPage/>}></Route>
+            
             <Route path='users' element={<UserListPage/>}></Route>
             <Route path='userDetail/:id' element={<UserDetailPage/>}></Route>
             <Route path='userAdd' element={<UserAddPage/>}></Route>
             <Route path='userEdit/:id' element={<UserEditPage/>}></Route>
+            
             <Route path='roles' element={<RoleListPage/>}></Route>
             <Route path='roleDetail/:id' element={<RoleDetailPage/>}></Route>
             <Route path='roleEdit/:id' element={<RoleEditPage/>}></Route>
-            <Route path='roleAdd' element={<RoleAddPage/>}></Route>
-            <Route path='productEdit/:id' element={<ProductEditPage/>}></Route>
+            <Route path='roleAdd' element={<RoleAddPage/>}></Route>            
+            
             <Route path='setting' element={<SettingPage/>}></Route>
           </Route>
         </Routes>      

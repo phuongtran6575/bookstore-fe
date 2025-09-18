@@ -1,12 +1,34 @@
 import { Box, Typography, TextField, Button,} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { useCreateBook } from "../../../api/hook/useBook";
+import { useBookAuthorRelationship, useBookCategoryRelationship, useBookPublisherRelationship, useBookTagRelationship, useCreateBook } from "../../../api/hook/useBook";
 import { useState } from "react";
 import type {  BookCreate } from "../../../core/Types";
+import { useAuthorCrud, useCategoryCrud, usePublisherCrud, useTagCrud } from "../../../api/hook/useUltility";
 
 const ProductAddPage = () => {
+  const {useAddCategoryToBook} = useBookCategoryRelationship();
+  const {useAddAuthorToBook} = useBookAuthorRelationship();
+  const {useAddPublisherToBook} = useBookPublisherRelationship();
+  const {useAddTagToBook} = useBookTagRelationship();
+
+  const {useGetListCategories} = useCategoryCrud();
+  const {useGetListAuthors} = useAuthorCrud();
+  const {useGetListPublishers} = usePublisherCrud();
+  const {useGetListTags} = useTagCrud();
+
+
   const navigate = useNavigate();
   const createBook = useCreateBook();
+  const addCategoryToBook = useAddCategoryToBook();
+  const addAuthorToBook = useAddAuthorToBook();
+  const addPublisherToBook = useAddPublisherToBook();
+  const addTagToBook = useAddTagToBook();
+  
+  const {data: categories = []} = useGetListCategories();
+  const {data: authors = []} = useGetListAuthors();
+  const {data: publishers = []} = useGetListPublishers();
+  const {data: tags = []} = useGetListTags();
+
   const [formData, setFormData] = useState<BookCreate>({
     title: "",
     description: "",

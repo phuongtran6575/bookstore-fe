@@ -22,7 +22,7 @@ axiosAPI.interceptors.response.use(
 );
 
 
-export interface Service<T> {
+export interface crudService<T> {
   getAll: () => Promise<T[]>;
   getById: (id: string) => Promise<T>;
   create: (data: Partial<T>) => Promise<T>;
@@ -30,7 +30,7 @@ export interface Service<T> {
   delete: (id: string) => Promise<void>;
 }
 
-export function createCrudService<T>(baseUrl: string): Service<T> {
+export function createCrudService<T>(baseUrl: string): crudService<T> {
   return {
     getAll: async () => {
       const res = await axiosAPI.get(baseUrl);
@@ -53,4 +53,41 @@ export function createCrudService<T>(baseUrl: string): Service<T> {
     },
   };
 }
+
+export interface RelationshipService<TLeft, TRight, TReturn = any> {
+  getAll: (leftId: TLeft) => Promise<TReturn[]>;
+  add: (leftId: TLeft, rightId: TRight) => Promise<TReturn>;
+  remove: (leftId: TLeft, rightId: TRight) => Promise<void>;
+}
+
+export function createRelationshipService<
+  TLeft = string,
+  TRight = string,
+  TReturn = any
+>(
+  baseUrl: string,
+  leftKey: string,
+  rightKey: string
+): RelationshipService<TLeft, TRight, TReturn> {
+  return {
+    getAll: async (leftId: TLeft) => {
+      const res = await axiosAPI.get(baseUrl, { params: { [leftKey]: leftId } });
+      return res.data;
+    },
+    add: async (leftId: TLeft, rightId: TRight) => {
+      const payload = { [leftKey]: leftId, [rightKey]: rightId };
+      console.log("Payload gửi lên:", payload);
+      const res = await axiosAPI.post(baseUrl, {
+        [leftKey]: leftId,
+        [rightKey]: rightId,
+      });
+      return res.data;
+    },
+    remove: async (leftId: TLeft, rightId: TRight) => {
+      await axiosAPI.delete(`${baseUrl}/${leftId}/${rightId}`);
+    },
+  };
+}
+
+
 

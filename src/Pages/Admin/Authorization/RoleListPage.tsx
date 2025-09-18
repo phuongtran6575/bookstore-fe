@@ -8,8 +8,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useRoleCrud } from '../../../api/hook/useUser';
 
 const RoleListPage = () => {
-    const { useGetListRoles, useDeleteRole } = useRoleCrud();
-    const deleteRole = useDeleteRole();
+  const { useGetListRoles, useDeleteRole } = useRoleCrud();
+  const deleteRole = useDeleteRole();
   const navigate = useNavigate()
   const { data: roles = [], isLoading, error } = useGetListRoles();
 

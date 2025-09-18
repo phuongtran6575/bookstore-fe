@@ -6,7 +6,7 @@ export const useCategoryCrud = () => {
   const crudCategory = useCrud<Category>("categories", categoryService);
 
   return {
-    useGetListsCategories: crudCategory.useGetList,
+    useGetListCategories: crudCategory.useGetList,
     useGetCategoryById: crudCategory.useGetById,
     useCreateCategory: crudCategory.useCreate,
     useUpdateCategory: crudCategory.useUpdate,

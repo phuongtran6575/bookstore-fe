@@ -1,5 +1,5 @@
 import type { Book } from "../../core/Types";
-import { axiosAPI } from "./baseService";
+import { axiosAPI, createRelationshipService } from "./baseService";
 
 
 export const bookService = {
@@ -27,4 +27,12 @@ export const bookService = {
     await axiosAPI.delete(`/books/${id}`);
   },
 };
+
+export const bookcategoryService = createRelationshipService("bookcategories","book_id","category_id");
+
+export const bookauthorService = createRelationshipService("bookauthors","book_id","author_id");
+
+export const bookpublisherService = createRelationshipService("bookpublishers","book_id","publisher_id");
+
+export const booktagService = createRelationshipService("booktags","book_id","tag_id");
 

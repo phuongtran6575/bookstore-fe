@@ -1,19 +1,26 @@
-import { Box, Typography, TextField, Button,} from "@mui/material";
+import { Box, Typography, TextField, Button, Autocomplete, Chip,} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type {   UserCreate } from "../../../core/Types";
-import { useUserCrud } from "../../../api/hook/useUser";
+import { useRoleCrud, useUserCrud, useUserRoleRelationship } from "../../../api/hook/useUser";
 
 const UserAddPage = () => {
-    const { useCreateUser } = useUserCrud();
+  const { useCreateUser } = useUserCrud();
+  const { useAddRoleToUser } = useUserRoleRelationship();
+  const {useGetListRoles} = useRoleCrud();
+
+  const addRoleToUser = useAddRoleToUser();
   const navigate = useNavigate();
   const createUser = useCreateUser();
+  
+  const {data: roles = []} = useGetListRoles()
   const [formData, setFormData] = useState<UserCreate>({
     full_name: "",
     email: "",
     password_hash: "",
     phone_number: "",
   });
+   const [selectedRoles, setSelectedRoles] = useState<any[]>([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.type === "number" ? Number(e.target.value) : e.target.value;
@@ -23,9 +30,12 @@ const UserAddPage = () => {
 
   const handleSave = () => {
     createUser.mutate(formData, {
-      onSuccess: () => {
+      onSuccess: (newUser) => {
+        console.log("Created user:", newUser);
+        selectedRoles.forEach((role) => {
+          addRoleToUser.mutate({ leftId: newUser.id, rightId: role.id });
+        });
         alert("Thêm User thành công!");
-        // có thể điều hướng về danh sách sản phẩm
         navigate("/admin/users");
       },
       onError: (err) => {
@@ -55,7 +65,26 @@ const UserAddPage = () => {
         
         <TextField fullWidth label="Password" name="password_hash" size="small"  sx={{ mb: 2 }} value={formData.password_hash} onChange={handleChange} />
         <TextField fullWidth label="Phone" name="phone_number" size="small"  sx={{ mb: 2 }} value={formData.phone_number} onChange={handleChange} />
+
+        <Autocomplete
+          multiple
+          options={roles}
+          getOptionLabel={(option) => option.name}
+          value={selectedRoles}
+          onChange={(_e, value) => setSelectedRoles(value)}
+          renderInput={(params) => (
+            <TextField {...params} variant="outlined" label="Chọn Roles" />
+          )}
+          // dùng renderOption thay cho renderTags
+          renderOption={(props, option) => (
+            <li {...props} key={option.id}>
+              <Chip label={option.name} />
+            </li>
+          )}
+        />
+
       </Box>
+      
 
 
       {/* Nút */}

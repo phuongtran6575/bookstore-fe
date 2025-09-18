@@ -9,9 +9,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useCategoryCrud } from '../../../api/hook/useUltility';
 
 const CategoryListPage = () => {
-    const { useGetListsCategories } = useCategoryCrud();
+  const { useGetListCategories } = useCategoryCrud();
 
-  const { data: categories = [], isLoading, error } = useGetListsCategories();
+  const { data: categories = [], isLoading, error } = useGetListCategories();
 
   if (isLoading) return <p>Loading books...</p>;
   if (error) return <p>Error loading books</p>;

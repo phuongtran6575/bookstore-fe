@@ -77,7 +77,7 @@ const UserEditPage = () => {
 
     setSelectedRoles(value); // cập nhật lại state
   };
-
+  console.log("")
 
   return (
     <Box p={3}>
@@ -96,9 +96,9 @@ const UserEditPage = () => {
       
         <Autocomplete
           multiple
-          options={allRoles}
+          options={allRoles || []}
           getOptionLabel={(option) => option.name}
-          value={selectedRoles}
+          value={selectedRoles || []}
           onChange={handleRoleChange}
           renderInput={(params) => (
             <TextField {...params} variant="outlined" label="Chọn Roles" />

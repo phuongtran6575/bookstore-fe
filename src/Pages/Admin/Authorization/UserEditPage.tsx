@@ -77,7 +77,6 @@ const UserEditPage = () => {
 
     setSelectedRoles(value); // cập nhật lại state
   };
-  console.log("")
 
   return (
     <Box p={3}>
@@ -100,6 +99,7 @@ const UserEditPage = () => {
           getOptionLabel={(option) => option.name}
           value={selectedRoles || []}
           onChange={handleRoleChange}
+          isOptionEqualToValue={(option, value) => option.id === value.id} // 👈 fix trùng
           renderInput={(params) => (
             <TextField {...params} variant="outlined" label="Chọn Roles" />
           )}

@@ -1,7 +1,9 @@
 import { Box, Divider, IconButton, InputBase, Typography } from "@mui/material";
 import { Search, ShoppingCart, Person, MenuBook } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 const Header = () =>
 {
+  const navigate = useNavigate();  
     return (
     <Box sx={{ width: "100%", borderBottom: "1px solid #e5e7eb", height:"15%", backgroundColor:"white" }}>
       {/* Top bar */}
@@ -25,7 +27,7 @@ const Header = () =>
           <IconButton>
             <ShoppingCart />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={() =>{navigate("/auth/login")}}>
             <Person />
           </IconButton>
         </Box>

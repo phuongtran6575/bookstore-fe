@@ -8,16 +8,11 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: async (data: { email: string; password: string }) => {
       const tokenRes = await authService.login(data); // lấy token
-      localStorage.setItem("access_token", tokenRes.access_token);
-      const user = await authService.readMe();   
-      localStorage.setItem("user", user)
-      console.log(user)
-      return { token: tokenRes.access_token, user };
-       
+      return { token: tokenRes.access_token };      
     },
-    onSuccess: ({ token, user }) => {
-      console.log(user)
-      login(token, user);
+    onSuccess: ({ token }) => {
+      console.log(token)
+      login(token)
     },
   });
 };
@@ -26,11 +21,12 @@ export const useLogin = () => {
 export const useRegister = () =>{
    return useMutation({
     mutationFn: authService.register,
-    
    })
-    
 }
 
+export const logout = () =>{
+  
+}
 
 export const useReadMe = () => {
   const setUser = useAuthStore(state => state.setUser);

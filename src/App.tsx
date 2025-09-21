@@ -34,6 +34,7 @@ import ProductEditPage from './Pages/Admin/Product/ProductEditPage'
 import AuthorListPage from './Pages/Admin/Ultility/AuthorListPage'
 import PublisherListPage from './Pages/Admin/Ultility/PublisherListPage'
 import TagListPage from './Pages/Admin/Ultility/TagListPage'
+import ProtectedRoute from './Component/Client/ProtectedRoute'
 
 
 
@@ -52,7 +53,8 @@ function App() {
               <Route path='login' element={<LoginPage/>}></Route>
               <Route path='register' element={<RegisterPage/>}></Route>
             </Route>
-            <Route path='account' element={<AccountLayout/>}>
+            <Route element={<ProtectedRoute />}>
+              <Route path='account' element={<AccountLayout/>}>
               <Route index element={<AccountDashboardPage/>}></Route>
               <Route path='accountdashboard' element={<AccountDashboardPage/>}></Route>
               <Route path='profile' element={<ProfilePage/>}></Route>
@@ -60,6 +62,8 @@ function App() {
               <Route path='orderdetail' element={<OrderDetailPage/>}></Route>
               <Route path='orderhistory' element={<OrderHistoryPage/>}></Route>
             </Route>
+            </Route>
+            
          </Route>
          <Route path='/admin' element = {<AdminLayout/>}>
             <Route index element={<DashboardPage/>}></Route>

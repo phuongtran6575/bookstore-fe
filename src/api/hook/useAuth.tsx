@@ -29,14 +29,14 @@ export const logout = () =>{
 }
 
 export const useReadMe = () => {
-  const setUser = useAuthStore(state => state.setUser);
+  const setAuth = useAuthStore(state => state.setAuth);
 
   return useQuery({
     queryKey: ["me"],
     queryFn: async () => {
-      const user = await authService.readMe();
-      setUser(user);
-      return user;
+      const res = await authService.readMe();
+      setAuth(res.user, res.roles);
+      return res;
     },
     enabled: !!useAuthStore.getState().token, // chỉ chạy nếu có token
   });

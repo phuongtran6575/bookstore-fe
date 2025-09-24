@@ -1,66 +1,14 @@
-import { Box, Typography, Button, Card, CardContent, Divider, Chip, Stack } from "@mui/material";
+import { Box, Typography, Button, Stack } from "@mui/material";
+import AddressCard from "../../Component/Client/AddressCard";
+import { useGetAddrressesUSer } from "../../api/hook/useUser";
 
-const AddressCard = ({ name, phone, address, isDefault }: any) => {
-  return (
-    <Card
-      variant="outlined"
-      sx={{
-        borderRadius: 2,
-        p: 2,
-        flex: 1,
-        minWidth: "300px",
-      }}
-    >
-      <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography fontWeight="bold">{name}</Typography>
-          {isDefault && (
-            <Chip
-              label="Mặc định"
-              size="small"
-              color="success"
-              sx={{ bgcolor: "rgba(34,197,94,0.1)", color: "green" }}
-            />
-          )}
-        </Stack>
-        <Typography>{phone}</Typography>
-        <Typography whiteSpace="pre-line">{address}</Typography>
-
-        <Divider sx={{ my: 1 }} />
-
-        <Stack direction="row" spacing={2}>
-          <Button size="small" color="warning">Sửa</Button>
-          <Button size="small" color="error">Xóa</Button>
-          {!isDefault && (
-            <Button size="small">Đặt làm mặc định</Button>
-          )}
-        </Stack>
-      </CardContent>
-    </Card>
-  );
-};
 
 const AddressBookPage = () => {
-  const addresses = [
-    {
-      name: "Trần Thị An",
-      phone: "0987654321",
-      address: "123 Đường Sách, Phường Bến Nghé\nQuận 1, TP. Hồ Chí Minh",
-      isDefault: true,
-    },
-    {
-      name: "Trần Thị An",
-      phone: "0987654321",
-      address: "456 Chung cư Tri Thức, Tầng 10\nQuận 3, TP. Hồ Chí Minh",
-      isDefault: false,
-    },
-    {
-      name: "Văn phòng Công ty",
-      phone: "02838123456",
-      address: "789 Tòa nhà Office, Đường Công Nghệ\nTP. Thủ Đức, TP. Hồ Chí Minh",
-      isDefault: false,
-    },
-  ];
+  const { data: addresses = [], isLoading, error } = useGetAddrressesUSer();
+
+  if (isLoading) return <p>Loading books...</p>;
+  if (error) return <p>Error loading books</p>;
+  
 
   return (
     <Box p={3} >
@@ -74,8 +22,8 @@ const AddressBookPage = () => {
       </Stack>
 
       <Stack direction="row" flexWrap="wrap" gap={2}>
-        {addresses.map((addr, index) => (
-          <AddressCard key={index} {...addr} />
+        {addresses.map((addr) => (
+          <AddressCard key={addr.id} name={addr.full_name} phone={addr.phone_number} address={addr.full_address} isDefault = {addr.is_default}  />
         ))}
       </Stack>
     </Box>

@@ -68,9 +68,8 @@ export interface Role{
 
 export interface Address {
     id: string;
-    name: string;
-    phone: string;
-    street: string;
-    city: string;
-    isDefault: boolean;
+    full_name: string;
+    phone_number: string;
+    full_address: string;
+    is_default: boolean;
 }

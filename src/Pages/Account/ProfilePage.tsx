@@ -4,6 +4,7 @@ import { useReadMe } from '../../api/hook/useAuth'
 
 const ProfilePage = () => {
   const {data: profile, isLoading, error} = useReadMe()
+  console.log(profile)
   if (isLoading) return <p>Loading books...</p>;
   if (error) return <p>Error loading books</p>;
 
@@ -19,6 +20,7 @@ const ProfilePage = () => {
               <TextField disabled  fullWidth  value={profile.user.email} size="small" sx={{ mb: 2 }} />
                <InputLabel sx={{mb: 1}} >Số điện thoại</InputLabel>
               <TextField disabled  fullWidth  value={profile.user.phone_number} size="small" sx={{ mb: 2 }} />
+              
             </Box>
     </Box>
   )

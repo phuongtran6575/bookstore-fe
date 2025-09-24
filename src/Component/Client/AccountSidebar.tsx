@@ -11,7 +11,7 @@ const AccountSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation(); // 👈 Lấy route hiện tại
 
-   if (isLoading) return <p>Loading books...</p>;
+   if (isLoading) return <p>Loading profile...</p>;
   if (error) return <p>Error loading books</p>;
 
   const handleLogout = () => {

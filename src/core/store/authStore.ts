@@ -6,14 +6,16 @@ import type { User } from "../Types";
 
 interface AuthState {
   user: User | null;
+  roles: string[];
   token: string | null;
   login: (token: string) => void;
   logout: () => void;
-  setUser: (user: User) => void;
+  setAuth: (user: User, roles: string[]) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: JSON.parse(localStorage.getItem("user") || "null"),
+  roles: JSON.parse(localStorage.getItem("roles") || "[]"),
   token: localStorage.getItem("access_token"),
 
   login: (token) => {
@@ -24,11 +26,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
-    set({ token: null, user: null });
+    localStorage.removeItem("roles");
+    set({ token: null, user: null, roles: [] });
   },
 
-  setUser: (user) => {
+  setAuth: (user, roles) => {
     localStorage.setItem("user", JSON.stringify(user));
-    set({ user });
+    localStorage.setItem("roles", JSON.stringify(roles));
+    set({ user, roles });
   },
 }));

@@ -65,6 +65,7 @@ function App() {
             </Route>
             
          </Route>
+         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
          <Route path='/admin' element = {<AdminLayout/>}>
             <Route index element={<DashboardPage/>}></Route>
             <Route path='dashboard' element={<DashboardPage/>}></Route>
@@ -92,6 +93,8 @@ function App() {
             
             <Route path='setting' element={<SettingPage/>}></Route>
           </Route>
+         </Route>
+         
         </Routes>      
       </Box>
     </BrowserRouter>

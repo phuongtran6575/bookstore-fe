@@ -32,7 +32,7 @@ export const usePublisherCrud = () =>{
         useGetPublisherById : crudPublisher.useGetById,
         useCreatePublisher : crudPublisher.useCreate,
         useUpdatePublisher : crudPublisher.useUpdate,
-        seDeletePublisher : crudPublisher.useDelete,
+        useDeletePublisher : crudPublisher.useDelete,
     }
 
 }

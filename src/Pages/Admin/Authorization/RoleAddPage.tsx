@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRoleCrud } from "../../../api/hook/useUser";
 
 const RoleAddPage = () => {
-    const { useCreateRole } = useRoleCrud();
+  const { useCreateRole } = useRoleCrud();
   const navigate = useNavigate();
   const createUser = useCreateRole();
   const [formData, setFormData] = useState({

@@ -9,8 +9,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useCategoryCrud } from '../../../api/hook/useUltility';
 
 const CategoryListPage = () => {
-  const { useGetListCategories } = useCategoryCrud();
-
+  const { useGetListCategories, useDeleteCategory } = useCategoryCrud();
+  const deleteCategory =useDeleteCategory() 
   const { data: categories = [], isLoading, error } = useGetListCategories();
 
   if (isLoading) return <p>Loading books...</p>;
@@ -28,8 +28,8 @@ const CategoryListPage = () => {
   };
 
   const handleDelete = (id: string) => {
-    //deleteBook.mutate(id);
-    console.log("delete product", id)
+    deleteCategory.mutate(id);
+    console.log("delete category", id)
     
   };
   
@@ -80,7 +80,7 @@ const CategoryListPage = () => {
   return (
     <Box>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, }}>
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>Product Manager</Typography>
+              <Typography variant="h6" sx={{ fontWeight: "bold" }}>Category Manager</Typography>
         </Box>
         <Box sx={{border: "1px solid #e5e7eb", borderRadius: 2,  backgroundColor:"white", p:3}}>
           <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, }}>
@@ -94,7 +94,7 @@ const CategoryListPage = () => {
                       ),
                     },
                   }}/>
-              <Button  component={Link} to="/admin/productAdd" variant="contained" color="warning"> + Thêm danh mục</Button>
+              <Button  component={Link} to="/admin/categoryAdd" variant="contained" color="warning"> + Thêm danh mục</Button>
             </Box>
           <DataGrid
             rows={categories}

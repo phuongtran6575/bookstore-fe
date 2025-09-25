@@ -9,8 +9,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useTagCrud } from '../../../api/hook/useUltility';
 
 const TagListPage = () => {
-    const { useGetListTags } = useTagCrud();
-
+  const { useGetListTags, useDeleteTag } = useTagCrud();
+  const deleteTag = useDeleteTag()
   const { data: tags = [], isLoading, error } = useGetListTags();
 
   if (isLoading) return <p>Loading books...</p>;
@@ -28,8 +28,8 @@ const TagListPage = () => {
   };
 
   const handleDelete = (id: string) => {
-    //deleteBook.mutate(id);
-    console.log("delete product", id)
+    deleteTag.mutate(id);
+    console.log("delete tag", id)
     
   };
   
@@ -93,7 +93,7 @@ const TagListPage = () => {
                       ),
                     },
                   }}/>
-              <Button  component={Link} to="/admin/productAdd" variant="contained" color="warning"> + Thêm Tag</Button>
+              <Button  component={Link} to="/admin/tagAdd" variant="contained" color="warning"> + Thêm Tag</Button>
             </Box>
           <DataGrid
             rows={tags}

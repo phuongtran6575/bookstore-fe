@@ -1,16 +1,5 @@
 import { useState } from "react";
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Badge,
-  Box,
-  Avatar,
-  Menu as MuiMenu,
-  MenuItem,
-  ListItemText,
-} from "@mui/material";
+import { AppBar, Toolbar, IconButton, Typography, Badge, Box, Avatar, Menu as MuiMenu, MenuItem, ListItemText,} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -75,44 +64,27 @@ const AdminHeader = () => {
         color: "black",
         borderBottom: "1px solid #e5e7eb",
         boxShadow: "none",
-        transition: "all 0.3s ease",
-      }}
-    >
+        transition: "all 0.3s ease",}}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Toggle sidebar */}
-        <IconButton color="inherit" edge="start" onClick={toggle} sx={{ mr: 2 }}>
-          <MenuIcon />
-        </IconButton>
+        <IconButton color="inherit" edge="start" onClick={toggle} sx={{ mr: 2 }}> <MenuIcon /> </IconButton>
 
         {/* Right section */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           {/* Notifications */}
           <IconButton color="inherit" onClick={handleNotifClick}>
-            <Badge color="error" variant="dot" invisible={notifications.length === 0}>
-              <NotificationsIcon />
-            </Badge>
+            <Badge color="error" variant="dot" invisible={notifications.length === 0}> <NotificationsIcon /> </Badge>
           </IconButton>
 
           {/* Account */}
-          <Box
-            sx={{ display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
-            onClick={handleAccountClick}
-          >
-            <Avatar sx={{ width: 32, height: 32 }}>
-              <AccountCircleIcon />
-            </Avatar>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }} onClick={handleAccountClick} >
+            <Avatar sx={{ width: 32, height: 32 }}> <AccountCircleIcon /> </Avatar>
 
             {open && token && (
               <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                  Quản Trị Viên
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  admin
-                </Typography>
-              </Box>
-            )}
-
+                <Typography variant="body1" sx={{ fontWeight: 500 }}> Quản Trị Viên </Typography>
+                <Typography variant="caption" color="text.secondary"> admin </Typography>
+              </Box> )}
             {token && (accountMenuOpen ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />)}
           </Box>
         </Box>
@@ -125,34 +97,27 @@ const AdminHeader = () => {
           open={accountMenuOpen}
           onClose={handleAccountClose}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          transformOrigin={{ vertical: "top", horizontal: "right" }}
-        >
-          <MenuItem
-            onClick={() => {
+          transformOrigin={{ vertical: "top", horizontal: "right" }} >
+
+          <MenuItem  onClick={() => {
               handleAccountClose();
-              navigate("/admin/account");
-            }}
-          >
+              navigate("/account"); }} >
             Tài khoản của tôi
           </MenuItem>
-          <MenuItem
-            onClick={() => {
+
+          <MenuItem onClick={() => {
               handleAccountClose();
-              navigate("/admin/settings");
-            }}
-          >
+              navigate("/admin/settings"); }} >
             Cài đặt
           </MenuItem>
-          <MenuItem
-            onClick={() => {
+
+          <MenuItem onClick={() => {
               logout();
-              handleAccountClose();
-            }}
-          >
+              handleAccountClose(); }} >
             Đăng xuất
           </MenuItem>
-        </MuiMenu>
-      )}
+
+        </MuiMenu>)}
 
       {/* Notification Menu */}
       <MuiMenu

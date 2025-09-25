@@ -6,11 +6,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import SearchIcon from "@mui/icons-material/Search";
-import { useCategoryCrud, usePublisherCrud } from '../../../api/hook/useUltility';
+import {  usePublisherCrud } from '../../../api/hook/useUltility';
 
 const PublisherListPage = () => {
-    const { useGetListPublishers} = usePublisherCrud();
-
+  const { useGetListPublishers, useDeletePublisher} = usePublisherCrud();
+  const deletePublisher = useDeletePublisher() 
   const { data: publishers = [], isLoading, error } = useGetListPublishers();
 
   if (isLoading) return <p>Loading books...</p>;
@@ -28,8 +28,8 @@ const PublisherListPage = () => {
   };
 
   const handleDelete = (id: string) => {
-    //deleteBook.mutate(id);
-    console.log("delete product", id)
+    deletePublisher.mutate(id);
+    console.log("delete publisher", id)
     
   };
   
@@ -78,7 +78,7 @@ const PublisherListPage = () => {
   return (
     <Box>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, }}>
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>Product Manager</Typography>
+              <Typography variant="h6" sx={{ fontWeight: "bold" }}>Publisher Manager</Typography>
         </Box>
         <Box sx={{border: "1px solid #e5e7eb", borderRadius: 2,  backgroundColor:"white", p:3}}>
           <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, }}>
@@ -92,7 +92,7 @@ const PublisherListPage = () => {
                       ),
                     },
                   }}/>
-              <Button  component={Link} to="/admin/productAdd" variant="contained" color="warning"> + Thêm danh mục</Button>
+              <Button  component={Link} to="/admin/publisherAdd" variant="contained" color="warning"> + Thêm danh mục</Button>
             </Box>
           <DataGrid
             rows={publishers}

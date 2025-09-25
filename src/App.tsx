@@ -35,6 +35,13 @@ import AuthorListPage from './Pages/Admin/Ultility/AuthorListPage'
 import PublisherListPage from './Pages/Admin/Ultility/PublisherListPage'
 import TagListPage from './Pages/Admin/Ultility/TagListPage'
 import ProtectedRoute from './Component/Client/ProtectedRoute'
+import CategoryDetailPage from './Pages/Admin/Ultility/CategoryDetailPage'
+import AuthorDetailPage from './Pages/Admin/Ultility/AuthorDetailPage'
+import PublisherDetailPage from './Pages/Admin/Ultility/PublisherDetailPage'
+import TagDetailPage from './Pages/Admin/Ultility/TagDetailPage'
+import CategoryAddPage from './Pages/Admin/Ultility/CategoryAddPage'
+import AuthorAddPage from './Pages/Admin/Ultility/AuthorAddPage'
+import PublisherAddPage from './Pages/Admin/Ultility/PublisherAddPage'
 
 
 
@@ -76,9 +83,20 @@ function App() {
             <Route path='productEdit/:id' element={<ProductEditPage/>}></Route>
             
             <Route path='categories' element={<CategoryListPage/>}></Route>
+            <Route path='categoryAdd' element={<CategoryAddPage/>}></Route>
+            <Route path='categoryDetail/:id' element={<CategoryDetailPage/>}></Route>
+
             <Route path='authors' element={<AuthorListPage/>}></Route>
+            <Route path='authorAdd' element={<AuthorAddPage/>}></Route>
+            <Route path='authorDetail/:id' element={<AuthorDetailPage/>}></Route>
+
             <Route path='publishers' element={<PublisherListPage/>}></Route>
+            <Route path='publisherAdd' element={<PublisherAddPage/>}></Route>
+            <Route path='publisherDetail/:id' element={<PublisherDetailPage/>}></Route>
+
             <Route path='tags' element={<TagListPage/>}></Route>
+            <Route path='tagDetail/:id' element={<TagDetailPage/>}></Route>
+            
             <Route path='orders' element={<OrderListPage/>}></Route>
             
             <Route path='users' element={<UserListPage/>}></Route>

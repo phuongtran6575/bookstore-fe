@@ -1,7 +1,7 @@
 import { Box, Typography, TextField, Button, Autocomplete, Chip,} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import type {   UserCreate } from "../../../core/Types";
+import type {   Role, UserCreate } from "../../../core/Types";
 import { useRoleCrud, useUserCrud, useUserRoleRelationship } from "../../../api/hook/useUser";
 
 const UserAddPage = () => {
@@ -20,7 +20,7 @@ const UserAddPage = () => {
     password_hash: "",
     phone_number: "",
   });
-   const [selectedRoles, setSelectedRoles] = useState<any[]>([]);
+   const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.type === "number" ? Number(e.target.value) : e.target.value;

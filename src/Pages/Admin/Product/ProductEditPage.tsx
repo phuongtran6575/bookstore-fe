@@ -16,6 +16,7 @@ const ProductEditPage = () => {
     price: 0,
     sale_price: 0,
     stock_quantity: 0,
+    ISBN:"",
     page_count: 0,
     cover_type: "",
     publication_date: null as Date | null,
@@ -30,6 +31,7 @@ const ProductEditPage = () => {
         price: book.price || 0,
         sale_price: book.sale_price || 0,
         stock_quantity: book.stock_quantity || 0,
+        ISBN: book.ISBN || "",
         page_count: book.page_count || 0,
         cover_type: book.cover_type || "",
         publication_date: book.publication_date ? new Date(book.publication_date) : null,      
@@ -72,6 +74,7 @@ const ProductEditPage = () => {
         <TextField fullWidth label="SKU" name="sku" size="small" sx={{ mb: 2 }} value={formData.sku} onChange={handleChange} />
         <TextField fullWidth label="Giá" name="price" size="small" type="number" sx={{ mb: 2 }} value={formData.price} onChange={handleChange} />
         <TextField fullWidth label="Giá Sale" name="sale_price" size="small" type="number" sx={{ mb: 2 }} value={formData.sale_price} onChange={handleChange} />
+        <TextField fullWidth label="ISBN" name="ISBN" size="small" sx={{ mb: 2 }} value={formData.ISBN} onChange={handleChange} />
         <TextField fullWidth label="Số lượng" name="stock_quantity" size="small" type="number" sx={{ mb: 2 }} value={formData.stock_quantity} onChange={handleChange} />
         <TextField fullWidth label="Số trang" name="page_count" size="small" type="number" sx={{ mb: 2 }} value={formData.page_count} onChange={handleChange} />
         <TextField fullWidth label="Loại" name="cover_type" size="small" sx={{ mb: 2 }} value={formData.cover_type} onChange={handleChange} />

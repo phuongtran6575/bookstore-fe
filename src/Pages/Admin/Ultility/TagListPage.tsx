@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import SearchIcon from "@mui/icons-material/Search";
-import { useCategoryCrud, useTagCrud } from '../../../api/hook/useUltility';
+import { useTagCrud } from '../../../api/hook/useUltility';
 
 const TagListPage = () => {
     const { useGetListTags } = useTagCrud();
@@ -38,7 +38,6 @@ const TagListPage = () => {
     const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', flex:1 },
     { field: 'slug', headerName: 'Slug', flex: 1 },
-    { field: 'parent_id', headerName: 'Price', flex: 1 },
     {
       field: "edit",
       headerName: "Edit",
@@ -80,7 +79,7 @@ const TagListPage = () => {
   return (
     <Box>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, }}>
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>Product Manager</Typography>
+              <Typography variant="h6" sx={{ fontWeight: "bold" }}>Tag Manager</Typography>
         </Box>
         <Box sx={{border: "1px solid #e5e7eb", borderRadius: 2,  backgroundColor:"white", p:3}}>
           <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, }}>
@@ -94,7 +93,7 @@ const TagListPage = () => {
                       ),
                     },
                   }}/>
-              <Button  component={Link} to="/admin/productAdd" variant="contained" color="warning"> + Thêm danh mục</Button>
+              <Button  component={Link} to="/admin/productAdd" variant="contained" color="warning"> + Thêm Tag</Button>
             </Box>
           <DataGrid
             rows={tags}

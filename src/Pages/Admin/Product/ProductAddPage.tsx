@@ -29,12 +29,13 @@ const ProductAddPage = () => {
   const {data: publishers = []} = useGetListPublishers();
   const {data: tags = []} = useGetListTags();
 
-  const [formData, setFormData] = useState<BookCreate>({
+  const [formData, setFormData] = useState({
     title: "",
     description: "",
     sku: "",
     price: 0,
     sale_price: 0,
+    ISBN: "",
     stock_quantity: 0,
     page_count: 0,
     cover_type: "",
@@ -87,6 +88,7 @@ const ProductAddPage = () => {
         <TextField fullWidth label="Giá Sale" name="sale_price" size="small" type="number" sx={{ mb: 2 }} value={formData.sale_price} onChange={handleChange} />
         <TextField fullWidth label="Số lượng" name="stock_quantity" size="small" type="number" sx={{ mb: 2 }} value={formData.stock_quantity} onChange={handleChange} />
         <TextField fullWidth label="Số trang" name="page_count" size="small" type="number" sx={{ mb: 2 }} value={formData.page_count} onChange={handleChange} />
+        <TextField fullWidth label="ISBN" name="ISBN" size="small" sx={{ mb: 2 }} value={formData.ISBN} onChange={handleChange} />
         <TextField fullWidth label="Loại" name="cover_type" size="small" sx={{ mb: 2 }} value={formData.cover_type} onChange={handleChange} />
         <TextField fullWidth label="Ngày phát hành" name="publication_date" size="small" type="date" sx={{ mb: 2 }} InputLabelProps={{ shrink: true }} value={formData.publication_date ? formData.publication_date.toISOString().split("T")[0] : ""} onChange={handleDateChange} />
       </Box>

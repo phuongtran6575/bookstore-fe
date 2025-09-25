@@ -39,6 +39,7 @@ const ProductDetailPage = () => {
           <TextField disabled defaultValue={book?.sale_price} fullWidth label="Giá Sale" size="small" sx={{ mb: 2 }} />
           <TextField disabled defaultValue={book?.stock_quantity} fullWidth label="Số lượng" size="small" sx={{ mb: 2 }} />
           <TextField disabled defaultValue={book?.page_count} fullWidth label="Số trang" size="small" sx={{ mb: 2 }} />
+          <TextField disabled defaultValue={book?.ISBN} fullWidth label="ISBN" size="small" sx={{ mb: 2 }} />
           <TextField disabled defaultValue={book?.cover_type} fullWidth label="Loại" size="small" sx={{ mb: 2 }} />
           <TextField disabled defaultValue={book?.publication_date} fullWidth label="Ngày phát hành" size="small" sx={{ mb: 2 }} />
           <TextField disabled defaultValue={book?.created_at} fullWidth label="Create ngày" size="small" sx={{ mb: 2 }} />

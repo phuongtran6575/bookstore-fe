@@ -42,6 +42,7 @@ import TagDetailPage from './Pages/Admin/Ultility/TagDetailPage'
 import CategoryAddPage from './Pages/Admin/Ultility/CategoryAddPage'
 import AuthorAddPage from './Pages/Admin/Ultility/AuthorAddPage'
 import PublisherAddPage from './Pages/Admin/Ultility/PublisherAddPage'
+import TagAddPage from './Pages/Admin/Ultility/TagAddPage'
 
 
 
@@ -95,6 +96,7 @@ function App() {
             <Route path='publisherDetail/:id' element={<PublisherDetailPage/>}></Route>
 
             <Route path='tags' element={<TagListPage/>}></Route>
+            <Route path='tagAdd' element={<TagAddPage/>}></Route>
             <Route path='tagDetail/:id' element={<TagDetailPage/>}></Route>
             
             <Route path='orders' element={<OrderListPage/>}></Route>

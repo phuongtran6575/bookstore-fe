@@ -9,6 +9,7 @@ const PublisherAddPage = () => {
   const createPublisher = useCreatePublisher();
   const [formData, setFormData] = useState({
     name: "",
+    address:"",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,15 +45,8 @@ const PublisherAddPage = () => {
 
       <Box padding={3} margin={7} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
         <Typography fontWeight="bold" mb={2}>Thông tin cơ bản</Typography>
-        <TextField
-          fullWidth
-          label="Tên nhà xuất bản"
-          name="name"
-          size="small"
-          sx={{ mb: 2 }}
-          value={formData.name}
-          onChange={handleChange}
-        />
+        <TextField fullWidth label="Tên nhà xuất bản" name="name" size="small" sx={{ mb: 2 }} value={formData.name} onChange={handleChange}/>
+        <TextField fullWidth label="Địa chỉ" name="address" size="small" sx={{ mb: 2 }} value={formData.address} onChange={handleChange}/>
       </Box>
 
       <Box mt={3} display="flex" justifyContent="flex-end" gap={2}>

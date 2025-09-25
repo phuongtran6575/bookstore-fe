@@ -44,15 +44,7 @@ const CategoryAddPage = () => {
 
       <Box padding={3} margin={7} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
         <Typography fontWeight="bold" mb={2}>Thông tin cơ bản</Typography>
-        <TextField
-          fullWidth
-          label="Tên danh mục"
-          name="name"
-          size="small"
-          sx={{ mb: 2 }}
-          value={formData.name}
-          onChange={handleChange}
-        />
+        <TextField fullWidth label="Tên danh mục"  name="name" size="small" sx={{ mb: 2 }} value={formData.name} onChange={handleChange} />
       </Box>
 
       <Box mt={3} display="flex" justifyContent="flex-end" gap={2}>

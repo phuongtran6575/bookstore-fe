@@ -37,8 +37,6 @@ const CategoryListPage = () => {
 
     const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', flex:1 },
-    { field: 'slug', headerName: 'Slug', flex: 1 },
-    { field: 'parent_id', headerName: 'Price', flex: 1 },
     {
       field: "edit",
       headerName: "Edit",

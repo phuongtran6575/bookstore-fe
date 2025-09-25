@@ -9,6 +9,7 @@ const AuthorAddPage = () => {
   const createAuthor = useCreateAuthor();
   const [formData, setFormData] = useState({
     name: "",
+    bio: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,15 +45,8 @@ const AuthorAddPage = () => {
 
       <Box padding={3} margin={7} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
         <Typography fontWeight="bold" mb={2}>Thông tin cơ bản</Typography>
-        <TextField
-          fullWidth
-          label="Tên tác giả"
-          name="name"
-          size="small"
-          sx={{ mb: 2 }}
-          value={formData.name}
-          onChange={handleChange}
-        />
+        <TextField fullWidth label="Tên tác giả" name="name" size="small" sx={{ mb: 2 }} value={formData.name} onChange={handleChange} />
+        <TextField fullWidth  multiline rows={4} label="Thông tin" name="bio" size="small" sx={{ mb: 2 }} value={formData.bio} onChange={handleChange} />
       </Box>
 
       <Box mt={3} display="flex" justifyContent="flex-end" gap={2}>

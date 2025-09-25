@@ -37,7 +37,6 @@ const TagListPage = () => {
 
     const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', flex:1 },
-    { field: 'slug', headerName: 'Slug', flex: 1 },
     {
       field: "edit",
       headerName: "Edit",

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Role, User } from "../../core/Types";
 import { addressService, roleService, useroleService, userService } from "../service/userService";
 import { useCrud, useRelationship } from "./useBaseHook";
@@ -36,18 +36,22 @@ export const useUserRoleRelationship = () => {
 
 export const useGetAddrressesUSer = () =>{
     return useQuery({
-        queryKey:["address"],
+        queryKey:["addresses"],
         queryFn: async () => {
            return  addressService.GetListAddressesUser()},
     })
 }
 export const useAddAddressToser = () =>{
+    const queryClient = useQueryClient();
     return useMutation({
-        mutationFn:(data: {user_id: string, full_address:string, is_default: boolean}) => addressService.AddAddressToUser(data),
+        mutationFn:(data: {full_name: string, full_address:string, phone_number: string, is_default: boolean}) => addressService.AddAddressToUser(data),
+        onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["addresses"] }); },
     })
 }
 export const useRemoveAddressFromUser = () =>{
+    const queryClient = useQueryClient();
     return useMutation({
-        mutationFn:  (id: string) => addressService.RemoveAddressFromUser(id)
+        mutationFn:  (id: string) => addressService.RemoveAddressFromUser(id),
+        onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["addresses"] }); },
     })
 }

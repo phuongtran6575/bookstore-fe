@@ -1,34 +1,27 @@
 import { Button, Card, CardContent, Chip, Divider, Stack, Typography } from "@mui/material";
+import { useAddAddressToser, useRemoveAddressFromUser } from "../../api/hook/useUser";
 
 interface AddressCardProps  {
     name: string;
     phone: string;
     address: string;
-    isDefault: boolean
+    isDefault: boolean;
+    id: string
 }
 
-const AddressCard = ({ name, phone, address, isDefault }: AddressCardProps) => {
+const AddressCard = ({ name, phone, address, isDefault, id }: AddressCardProps) => {
+  const deleteAddress = useRemoveAddressFromUser()
+  const handleDelete = (id: string) =>{
+    deleteAddress.mutate(id)
+  }
   return (
-    <Card
-      variant="outlined"
-      sx={{
-        borderRadius: 2,
-        p: 2,
-        flex: 1,
-        minWidth: "300px",
-      }}
-    >
+    <Card variant="outlined"
+      sx={{ borderRadius: 2,  p: 2, flex: 1, minWidth: "300px",}}>
       <CardContent>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Typography fontWeight="bold">{name}</Typography>
           {isDefault && (
-            <Chip
-              label="Mặc định"
-              size="small"
-              color="success"
-              sx={{ bgcolor: "rgba(34,197,94,0.1)", color: "green" }}
-            />
-          )}
+            <Chip label="Mặc định" size="small" color="success" sx={{ bgcolor: "rgba(34,197,94,0.1)", color: "green" }}/> )}
         </Stack>
         <Typography>{phone}</Typography>
         <Typography whiteSpace="pre-line">{address}</Typography>
@@ -37,7 +30,7 @@ const AddressCard = ({ name, phone, address, isDefault }: AddressCardProps) => {
 
         <Stack direction="row" spacing={2}>
           <Button size="small" color="warning">Sửa</Button>
-          <Button size="small" color="error">Xóa</Button>
+          <Button onClick={() => handleDelete(id)} size="small" color="error">Xóa</Button>
           {!isDefault && (
             <Button size="small">Đặt làm mặc định</Button>
           )}

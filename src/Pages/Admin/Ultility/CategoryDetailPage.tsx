@@ -9,6 +9,7 @@ const CategoryDetailPage = () => {
   if (!id) return <p>No category selected</p>;
   
   const { data: category, isLoading, error } = useGetCategoryById(id);
+  console.log(category)
 
   if (isLoading) return <p>Loading category...</p>;
   if (error) return <p>Failed to load category</p>;
@@ -27,6 +28,8 @@ const CategoryDetailPage = () => {
       <Box padding={3} margin={7} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
         <Typography fontWeight="bold" mb={2}>Thông tin cơ bản</Typography>
         <TextField disabled defaultValue={category?.name} fullWidth label="Tên danh mục" size="small" sx={{ mb: 2 }} />
+        <TextField disabled defaultValue={category?.slug} fullWidth label="Slug" size="small" sx={{ mb: 2 }} />
+        <TextField disabled defaultValue={category?.parentName} fullWidth label="Danh mục cha" size="small" sx={{ mb: 2 }} />
       </Box>
     </Box>
   );

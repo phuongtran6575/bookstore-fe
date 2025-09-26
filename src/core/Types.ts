@@ -29,22 +29,25 @@ export interface Category{
     id: number
     slug: string
     name: string
-    amount: number
+    parentName: String
 }
 
 export interface Author{
     id: string
     name: string
+    bio: string
 }
 
 export interface Publisher{
     id: string
     name: string
+    address: string
 }
 
 export interface Tag{
     id: string
     name: string
+    slug: string
 }
 
 

@@ -27,6 +27,7 @@ const TagDetailPage = () => {
       <Box padding={3} margin={7} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
         <Typography fontWeight="bold" mb={2}>Thông tin cơ bản</Typography>
         <TextField disabled defaultValue={tag?.name} fullWidth label="Tên thẻ" size="small" sx={{ mb: 2 }} />
+        <TextField disabled defaultValue={tag?.slug} fullWidth label="Slug" size="small" sx={{ mb: 2 }} />
       </Box>
     </Box>
   );

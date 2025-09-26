@@ -27,6 +27,7 @@ const PublisherDetailPage = () => {
       <Box padding={3} margin={7} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
         <Typography fontWeight="bold" mb={2}>Thông tin cơ bản</Typography>
         <TextField disabled defaultValue={publisher?.name} fullWidth label="Tên nhà xuất bản" size="small" sx={{ mb: 2 }} />
+        <TextField disabled defaultValue={publisher?.address} fullWidth label="Địa chỉ" size="small" sx={{ mb: 2 }} />
       </Box>
     </Box>
   );

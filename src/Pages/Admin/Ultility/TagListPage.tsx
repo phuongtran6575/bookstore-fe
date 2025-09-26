@@ -12,6 +12,8 @@ const TagListPage = () => {
   const { useGetListTags, useDeleteTag } = useTagCrud();
   const deleteTag = useDeleteTag()
   const { data: tags = [], isLoading, error } = useGetListTags();
+  const navigate = useNavigate()
+
 
   if (isLoading) return <p>Loading books...</p>;
   if (error) return <p>Error loading books</p>;
@@ -22,7 +24,7 @@ const TagListPage = () => {
   
   };
   const handleRead = (id: string) => {
-    //navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/tagDetail/${id}`);
     console.log("Add product", id)
     
   };

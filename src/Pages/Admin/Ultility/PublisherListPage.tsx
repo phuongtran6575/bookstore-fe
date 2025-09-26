@@ -12,6 +12,8 @@ const PublisherListPage = () => {
   const { useGetListPublishers, useDeletePublisher} = usePublisherCrud();
   const deletePublisher = useDeletePublisher() 
   const { data: publishers = [], isLoading, error } = useGetListPublishers();
+  const navigate = useNavigate()
+
 
   if (isLoading) return <p>Loading books...</p>;
   if (error) return <p>Error loading books</p>;
@@ -22,7 +24,7 @@ const PublisherListPage = () => {
   
   };
   const handleRead = (id: string) => {
-    //navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/publisherDetail/${id}`);
     console.log("Add product", id)
     
   };

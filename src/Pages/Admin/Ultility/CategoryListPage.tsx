@@ -12,6 +12,7 @@ const CategoryListPage = () => {
   const { useGetListCategories, useDeleteCategory } = useCategoryCrud();
   const deleteCategory =useDeleteCategory() 
   const { data: categories = [], isLoading, error } = useGetListCategories();
+  const navigate = useNavigate()
 
   if (isLoading) return <p>Loading books...</p>;
   if (error) return <p>Error loading books</p>;
@@ -22,7 +23,7 @@ const CategoryListPage = () => {
   
   };
   const handleRead = (id: string) => {
-    //navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/categoryDetail/${id}`);
     console.log("Add product", id)
     
   };
@@ -37,6 +38,7 @@ const CategoryListPage = () => {
 
     const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', flex:1 },
+    { field: "parentName", headerName: "Danh mục cha", flex: 1 },
     {
       field: "edit",
       headerName: "Edit",

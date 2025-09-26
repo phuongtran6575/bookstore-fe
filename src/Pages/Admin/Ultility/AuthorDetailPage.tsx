@@ -27,6 +27,7 @@ const AuthorDetailPage = () => {
       <Box padding={3} margin={7} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
         <Typography fontWeight="bold" mb={2}>Thông tin cơ bản</Typography>
         <TextField disabled defaultValue={author?.name} fullWidth label="Tên tác giả" size="small" sx={{ mb: 2 }} />
+        <TextField disabled defaultValue={author?.bio} fullWidth label="Thông tin" size="small" sx={{ mb: 2 }} />
       </Box>
     </Box>
   );

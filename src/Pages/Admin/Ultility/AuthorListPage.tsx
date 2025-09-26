@@ -12,6 +12,7 @@ const AuthorListPage = () => {
   const { useGetListAuthors, useDeleteAuthor } = useAuthorCrud();
   const deleteAuthor = useDeleteAuthor()
   const { data: authors = [], isLoading, error } = useGetListAuthors();
+  const navigate = useNavigate()
 
   if (isLoading) return <p>Loading books...</p>;
   if (error) return <p>Error loading books</p>;
@@ -22,7 +23,7 @@ const AuthorListPage = () => {
   
   };
   const handleRead = (id: string) => {
-    //navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/authorDetail/${id}`);
     console.log("Add product", id)
     
   };

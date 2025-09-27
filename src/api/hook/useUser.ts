@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Role, User } from "../../core/Types";
+import type { Address, Role, User } from "../../core/Types";
 import { addressService, roleService, useroleService, userService } from "../service/userService";
 import { useCrud, useRelationship } from "./useBaseHook";
 
@@ -41,6 +41,8 @@ export const useGetAddrressesUSer = () =>{
            return  addressService.GetListAddressesUser()},
     })
 }
+
+
 export const useAddAddressToser = () =>{
     const queryClient = useQueryClient();
     return useMutation({
@@ -53,5 +55,15 @@ export const useRemoveAddressFromUser = () =>{
     return useMutation({
         mutationFn:  (id: string) => addressService.RemoveAddressFromUser(id),
         onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["addresses"] }); },
+    })
+}
+export const useUpdateAddress = () =>{
+    const queryClient = useQueryClient(); 
+    return useMutation({
+        mutationFn: ({ id, data }: { id: string; data: {full_name: string, full_address:string, phone_number: string, is_default: boolean}}) =>
+             addressService.UpdateAddressUser(id, data),
+           onSuccess: () => {
+             queryClient.invalidateQueries({ queryKey: ["addresses"] });
+           },
     })
 }

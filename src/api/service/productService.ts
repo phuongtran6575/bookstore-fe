@@ -28,11 +28,11 @@ export const bookService = {
   },
 };
 
-export const bookcategoryService = createRelationshipService("bookcategories","book_id","category_id");
+export const bookcategoryService = createRelationshipService("bookcategories","product_id","category_id");
 
-export const bookauthorService = createRelationshipService("bookauthors","book_id","author_id");
+export const bookauthorService = createRelationshipService("bookauthors","product_id","author_id");
 
-export const bookpublisherService = createRelationshipService("bookpublishers","book_id","publisher_id");
+export const bookpublisherService = createRelationshipService("bookpublishers","product_id","publisher_id");
 
-export const booktagService = createRelationshipService("booktags","book_id","tag_id");
+export const booktagService = createRelationshipService("booktags","product_id","tag_id");
 

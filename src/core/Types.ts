@@ -26,7 +26,7 @@ export interface BookCreate {
   publication_date?: Date |null;}
 
 export interface Category{
-    id: number
+    id: string
     slug: string
     name: string
     parentName: String

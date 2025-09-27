@@ -7,10 +7,13 @@ interface AddressCardProps  {
     address: string;
     isDefault: boolean;
     id: string
+    onEdit: () => void
 }
 
-const AddressCard = ({ name, phone, address, isDefault, id }: AddressCardProps) => {
+const AddressCard = ({ name, phone, address, isDefault, id, onEdit }: AddressCardProps) => {
   const deleteAddress = useRemoveAddressFromUser()
+
+
   const handleDelete = (id: string) =>{
     deleteAddress.mutate(id)
   }
@@ -29,7 +32,7 @@ const AddressCard = ({ name, phone, address, isDefault, id }: AddressCardProps) 
         <Divider sx={{ my: 1 }} />
 
         <Stack direction="row" spacing={2}>
-          <Button size="small" color="warning">Sửa</Button>
+          <Button onClick={onEdit} size="small" color="warning">Sửa</Button>
           <Button onClick={() => handleDelete(id)} size="small" color="error">Xóa</Button>
           {!isDefault && (
             <Button size="small">Đặt làm mặc định</Button>

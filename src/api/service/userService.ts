@@ -19,5 +19,10 @@ export const addressService = {
     GetListAddressesUser:async (): Promise<Address[]>  =>{
         const res = await axiosAPI.get<Address[]>("/addresses", )
         return res.data
-    }
+    },
+    UpdateAddressUser: async (id: string, data: Partial<Address>): Promise<Address> => {
+        const res = await axiosAPI.put<Address>(`/addresses/${id}`, data);
+        return res.data;
+      },
+    
 }

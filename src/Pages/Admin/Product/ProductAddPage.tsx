@@ -1,8 +1,8 @@
-import { Box, Typography, TextField, Button,} from "@mui/material";
+import { Box, Typography, TextField, Button, Autocomplete, Chip,} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useBookAuthorRelationship, useBookCategoryRelationship, useBookPublisherRelationship, useBookTagRelationship, useCreateBook } from "../../../api/hook/useBook";
 import { useState } from "react";
-import type {  BookCreate } from "../../../core/Types";
+import type {  Author, Category, Publisher, Tag } from "../../../core/Types";
 import { useAuthorCrud, useCategoryCrud, usePublisherCrud, useTagCrud } from "../../../api/hook/useUltility";
 
 const ProductAddPage = () => {
@@ -52,9 +52,31 @@ const ProductAddPage = () => {
     setFormData(prev => ({ ...prev, publication_date:new Date(e.target.value)  }));
   };
 
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+  const [selectedAuthors, setSelectedAuthors] = useState<Author[]>([]);
+  const [selectedPublishers, setSelectedPublishers] = useState<Publisher[]>([]);
+
+  
+
   const handleSave = () => {
     createBook.mutate(formData, {
-      onSuccess: () => {
+      onSuccess: (newBook) => {
+        selectedCategories.forEach((category) => {
+          addCategoryToBook.mutate({ leftId: newBook.id, rightId: category.id });
+          
+        });
+        selectedAuthors.forEach((author) => {
+          addAuthorToBook.mutate({ leftId: newBook.id, rightId: author.id });
+          console.log(newBook.id)
+          console.log(author.id)
+        });
+        selectedTags.forEach((publisher) => {
+          addPublisherToBook.mutate({ leftId: newBook.id, rightId: publisher.id });
+        });
+        selectedTags.forEach((tag) => {
+          addTagToBook.mutate({ leftId: newBook.id, rightId: tag.id });
+        });
         alert("Thêm sách thành công!");
         // có thể điều hướng về danh sách sản phẩm
         navigate("/admin/books");
@@ -91,6 +113,75 @@ const ProductAddPage = () => {
         <TextField fullWidth label="ISBN" name="ISBN" size="small" sx={{ mb: 2 }} value={formData.ISBN} onChange={handleChange} />
         <TextField fullWidth label="Loại" name="cover_type" size="small" sx={{ mb: 2 }} value={formData.cover_type} onChange={handleChange} />
         <TextField fullWidth label="Ngày phát hành" name="publication_date" size="small" type="date" sx={{ mb: 2 }} InputLabelProps={{ shrink: true }} value={formData.publication_date ? formData.publication_date.toISOString().split("T")[0] : ""} onChange={handleDateChange} />
+        
+        <Autocomplete
+          multiple
+          options={categories}
+          getOptionLabel={(option) => option.name}
+          value={selectedCategories}
+          onChange={(_e, value) => setSelectedCategories(value)}
+          renderInput={(params) => (
+            <TextField {...params} variant="outlined" label="Chọn Danh mục" />
+          )}
+          // dùng renderOption thay cho renderTags
+          renderOption={(props, option) => (
+            <li {...props} key={option.id}>
+              <Chip label={option.name} />
+            </li>
+          )}
+        />
+
+        <Autocomplete
+          multiple
+          options={authors}
+          getOptionLabel={(option) => option.name}
+          value={selectedAuthors}
+          onChange={(_e, value) => setSelectedAuthors(value)}
+          renderInput={(params) => (
+            <TextField {...params} variant="outlined" label="Chọn tác giả" />
+          )}
+          // dùng renderOption thay cho renderTags
+          renderOption={(props, option) => (
+            <li {...props} key={option.id}>
+              <Chip label={option.name} />
+            </li>
+          )}
+        />
+
+        <Autocomplete
+          multiple
+          options={publishers}
+          getOptionLabel={(option) => option.name}
+          value={selectedPublishers}
+          onChange={(_e, value) => setSelectedPublishers(value)}
+          renderInput={(params) => (
+            <TextField {...params} variant="outlined" label="Chọn nhà xuất bản" />
+          )}
+          // dùng renderOption thay cho renderTags
+          renderOption={(props, option) => (
+            <li {...props} key={option.id}>
+              <Chip label={option.name} />
+            </li>
+          )}
+        />
+
+        <Autocomplete
+          multiple
+          options={tags}
+          getOptionLabel={(option) => option.name}
+          value={selectedTags}
+          onChange={(_e, value) => setSelectedTags(value)}
+          renderInput={(params) => (
+            <TextField {...params} variant="outlined" label="Chọn tag" />
+          )}
+          // dùng renderOption thay cho renderTags
+          renderOption={(props, option) => (
+            <li {...props} key={option.id}>
+              <Chip label={option.name} />
+            </li>
+          )}
+        />
+
       </Box>
 
       {/* Nút */}

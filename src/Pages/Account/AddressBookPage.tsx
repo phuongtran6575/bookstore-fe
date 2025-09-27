@@ -8,15 +8,24 @@ import { useState } from "react";
 const AddressBookPage = () => {
   const { data: addresses = [], isLoading, error } = useGetAddrressesUSer();
   const [open, setOpen ]= useState(false)
+   const [selectedAddress, setSelectedAddress] = useState<any | null>(null);
+  const [isEdit, setIsEdit] = useState<boolean>(false)
+  
   if (isLoading) return <p>Loading books...</p>;
   if (error) return <p>Error loading books</p>;
   
   const handleOpenModalAddress = () =>{
+    setIsEdit(false)
     setOpen(true)
   }
   
   const handleOnClose = () =>{
     setOpen(false)
+  }
+  const handleOnEdit = (address: any) => {
+    setIsEdit(true)
+     setSelectedAddress(address);
+    setOpen(true)
   }
 
   return (
@@ -29,10 +38,20 @@ const AddressBookPage = () => {
           + Thêm địa chỉ mới
         </Button>
       </Stack>
-      <AddressModalAccount open={open} onClose={handleOnClose}/>
+      <AddressModalAccount open={open} onClose={handleOnClose} isEdit={isEdit} address_id={selectedAddress?.id}
+        initialData={
+          selectedAddress
+            ? {
+                full_name: selectedAddress.full_name,
+                phone_number: selectedAddress.phone_number,
+                full_address: selectedAddress.full_address,
+                is_default: selectedAddress.is_default,
+              }
+            : undefined
+        }/>
       <Stack direction="row" flexWrap="wrap" gap={2}>
         {addresses.map((addr) => (
-          <AddressCard key={addr.id} name={addr.full_name} phone={addr.phone_number} address={addr.full_address} isDefault = {addr.is_default} id={addr.id}  />
+          <AddressCard key={addr.id} onEdit={() =>handleOnEdit(addr)} name={addr.full_name} phone={addr.phone_number} address={addr.full_address} isDefault = {addr.is_default} id={addr.id}  />
         ))}
       </Stack>
     </Box>

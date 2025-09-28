@@ -4,6 +4,8 @@ import {MenuBook,Search,ShoppingCart,Person,Menu,ExpandMore,ExpandLess,} from "@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../core/store/authStore";
 
+const allowedRoles = ["admin"];
+
 const Header = () => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width:768px)");
@@ -12,9 +14,13 @@ const Header = () => {
   // state cho account menu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const accountMenuOpen = Boolean(anchorEl);
+  
 
   const token = useAuthStore((state) => state.token);
+  const roles = useAuthStore(state => state.roles)
   const logout = useAuthStore((state) => state.logout);
+
+  const hasRole = roles.some(r => allowedRoles.includes(r));
 
   const navItems = [
     { name: "Trang Chủ", link: "/" },
@@ -51,13 +57,7 @@ const Header = () => {
 
         {/* Search */}
         {!isMobile && (
-          <Box
-            sx={{  display: "flex",
-              alignItems: "center",
-              bgcolor: "#374151",
-              borderRadius: 1,
-              overflow: "hidden",
-              width: "40%", }}>
+          <Box sx={{  display: "flex", alignItems: "center", bgcolor: "#374151", borderRadius: 1, overflow: "hidden", width: "40%", }}>
             <InputBase sx={{ flex: 1, px: 2, color: "white" }} placeholder="Tìm kiếm tên sách, tác giả..." />
             <IconButton sx={{ bgcolor: "orange", borderRadius: 0, "&:hover": { bgcolor: "#cc8400" } }}>
               <Search sx={{ color: "white" }} />
@@ -67,9 +67,7 @@ const Header = () => {
 
         {/* Cart + User + Menu */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <IconButton>
-            <ShoppingCart />
-          </IconButton>
+          <IconButton> <ShoppingCart /> </IconButton>
 
           {/* Nếu chưa login → Person icon để login */}
           {/* Nếu đã login → mở account menu */}
@@ -94,11 +92,7 @@ const Header = () => {
         <Box sx={{ display: "flex", justifyContent: "center", gap: 4, py: 1 }}>
           {navItems.map((item, i) => (
             <Typography component={Link} to={item.link} key={i}  variant="body2"
-              sx={{ textDecoration: "none",
-                color: "inherit",
-                fontWeight: 500,
-                cursor: "pointer",
-                "&:hover": { color: "orange" }, }} >
+              sx={{ textDecoration: "none", color: "inherit", fontWeight: 500, cursor: "pointer", "&:hover": { color: "orange" }, }} >
               {item.name}
             </Typography>
           ))}
@@ -130,8 +124,10 @@ const Header = () => {
           open={accountMenuOpen}
           onClose={handleAccountClose}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          transformOrigin={{ vertical: "top", horizontal: "right" }}
-        >
+          transformOrigin={{ vertical: "top", horizontal: "right" }}>
+          {hasRole && <MenuItem onClick={() => { handleAccountClose(); navigate("/admin"); }}>
+            Truy cập trang quản lý
+              </MenuItem>}
           <MenuItem onClick={() => { handleAccountClose(); navigate("/account/accountdashboard"); }}>
             Tài khoản của tôi
           </MenuItem>

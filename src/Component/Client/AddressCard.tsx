@@ -1,5 +1,5 @@
 import { Button, Card, CardContent, Chip, Divider, Stack, Typography } from "@mui/material";
-import {  useRemoveAddressFromUser } from "../../api/hook/useUser";
+import {  useRemoveAddressFromUser, useSetDefaultAddress } from "../../api/hook/useUser";
 
 interface AddressCardProps  {
     name: string;
@@ -12,7 +12,11 @@ interface AddressCardProps  {
 
 const AddressCard = ({ name, phone, address, isDefault, id, onEdit }: AddressCardProps) => {
   const deleteAddress = useRemoveAddressFromUser()
+  const setDefaultAddress = useSetDefaultAddress();
 
+  const handleSetDefault = (id: string) => {
+    setDefaultAddress.mutate(id);
+  };
 
   const handleDelete = (id: string) =>{
     deleteAddress.mutate(id)
@@ -35,7 +39,7 @@ const AddressCard = ({ name, phone, address, isDefault, id, onEdit }: AddressCar
           <Button onClick={onEdit} size="small" color="warning">Sửa</Button>
           <Button onClick={() => handleDelete(id)} size="small" color="error">Xóa</Button>
           {!isDefault && (
-            <Button size="small">Đặt làm mặc định</Button>
+            <Button onClick={() => handleSetDefault(id)} size="small">Đặt làm mặc định</Button>
           )}
         </Stack>
       </CardContent>

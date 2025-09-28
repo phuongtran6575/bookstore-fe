@@ -1,14 +1,21 @@
 import { Box,  Chip,  TextField, Typography } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
-import { useBookAuthorRelationship, useBookCategoryRelationship, useBookPublisherRelationship, useBookTagRelationship, useGetBookbyId } from '../../../api/hook/useBook';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { useBookAuthorRelationship, useBookCategoryRelationship, useBookPublisherRelationship, useBookTagRelationship, useGetBookbyId, useGetImagesBook, } from '../../../api/hook/useBook';
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>(); 
   const {useGetCategoriesByBookId} = useBookCategoryRelationship();
   const {useGetAuthorsByBookId} = useBookAuthorRelationship();
   const {useGetPublishersByBookId} = useBookPublisherRelationship();
   const {useGetTagsByBookId} = useBookTagRelationship();
+ 
 
   if (!id) return <p>No product selected</p>;
+  const { data: images, isLoading: isLoadingImages, error: errorImages } = useGetImagesBook(id);
   const { data: book, isLoading, error } = useGetBookbyId(id);
   const {data: categories, isLoading: isLoadingCategories, error: errorCategories  } = useGetCategoriesByBookId(id);
   const {data: authors, isLoading: isLoadingAuthors, error: errorAuthors  } = useGetAuthorsByBookId(id);
@@ -16,8 +23,8 @@ const ProductDetailPage = () => {
   const {data: tags, isLoading: isLoadingTags, error: errorTags  } = useGetTagsByBookId(id);
 
   if (!id) return <p>No user selected</p>;
-  if (isLoading || isLoadingCategories || isLoadingAuthors || isLoadingPublishers || isLoadingTags) return <p>Loading user...</p>;
-  if (error || errorCategories || errorAuthors || errorPublishers || errorTags) return <p>Failed to load user</p>;
+  if (isLoading || isLoadingCategories || isLoadingAuthors || isLoadingPublishers || isLoadingTags || isLoadingImages) return <p>Loading user...</p>;
+  if (error || errorCategories || errorAuthors || errorPublishers || errorTags ||errorImages) return <p>Failed to load user</p>;
 
   return (
     <Box p={3}>
@@ -131,7 +138,43 @@ const ProductDetailPage = () => {
               )}
             </Box>
         </Box>
+              <Box padding={3} margin={7} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
+              <Typography fontWeight="bold" mb={2}>
+                Hình ảnh
+              </Typography>
 
+              {images && images.length > 0 ? (
+                <Swiper
+                  modules={[Navigation, Pagination]}
+                  navigation
+                  pagination={{ clickable: true }}
+                  spaceBetween={10}
+                  slidesPerView={3}
+                  style={{ width: "100%", height: "300px" }}
+                >
+                  {images.map((img: any) => (
+                    <SwiperSlide key={img.id}>
+                      <Box
+                        component="img"
+                        src={img.image_url}
+                        alt={book?.title}
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: 2,
+                          border: "1px solid #e5e7eb",
+                        }}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  Chưa có hình ảnh nào
+                </Typography>
+              )}
+            </Box>
       
     </Box>
   )

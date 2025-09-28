@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Address, Role, User } from "../../core/Types";
+import type {  Role, User } from "../../core/Types";
 import { addressService, roleService, useroleService, userService } from "../service/userService";
 import { useCrud, useRelationship } from "./useBaseHook";
+import { axiosAPI } from "../service/baseService";
 
 export const useUserCrud = () => {
     const crudUser = useCrud<User>("users", userService);
@@ -67,3 +68,11 @@ export const useUpdateAddress = () =>{
            },
     })
 }
+
+export const useSetDefaultAddress = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => addressService.SetDefaultAddress(id),
+    onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["addresses"] }); },
+  });
+};

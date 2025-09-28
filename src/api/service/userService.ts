@@ -24,5 +24,9 @@ export const addressService = {
         const res = await axiosAPI.put<Address>(`/addresses/${id}`, data);
         return res.data;
       },
+    SetDefaultAddress: async(id: string) =>{
+        const res = await axiosAPI.put(`/addresses/${id}/set-default`)
+        return res.data
+    }
     
 }

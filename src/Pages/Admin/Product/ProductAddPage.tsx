@@ -1,9 +1,12 @@
-import { Box, Typography, TextField, Button, Autocomplete, Chip,} from "@mui/material";
+import { Box, Typography, TextField, Button, Autocomplete, Chip, IconButton,} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { useBookAuthorRelationship, useBookCategoryRelationship, useBookPublisherRelationship, useBookTagRelationship, useCreateBook } from "../../../api/hook/useBook";
+import { useAddImageToBook, useBookAuthorRelationship, useBookCategoryRelationship, useBookPublisherRelationship, useBookTagRelationship, useCreateBook } from "../../../api/hook/useBook";
 import { useState } from "react";
 import type {  Author, Category, Publisher, Tag } from "../../../core/Types";
 import { useAuthorCrud, useCategoryCrud, usePublisherCrud, useTagCrud } from "../../../api/hook/useUltility";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import { Delete } from "@mui/icons-material";
 
 const ProductAddPage = () => {
   const {useAddCategoryToBook} = useBookCategoryRelationship();
@@ -15,6 +18,7 @@ const ProductAddPage = () => {
   const {useGetListAuthors} = useAuthorCrud();
   const {useGetListPublishers} = usePublisherCrud();
   const {useGetListTags} = useTagCrud();
+  
 
 
   const navigate = useNavigate();
@@ -23,6 +27,7 @@ const ProductAddPage = () => {
   const addAuthorToBook = useAddAuthorToBook();
   const addPublisherToBook = useAddPublisherToBook();
   const addTagToBook = useAddTagToBook();
+  const addImageToBook = useAddImageToBook();
   
   const {data: categories = []} = useGetListCategories();
   const {data: authors = []} = useGetListAuthors();
@@ -43,6 +48,18 @@ const ProductAddPage = () => {
     
   });
 
+  const [images, setImages] = useState<File[]>([]);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const filesArray = Array.from(e.target.files);
+    setImages((prev) => [...prev, ...filesArray]);
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.type === "number" ? Number(e.target.value) : e.target.value;
     setFormData(prev => ({ ...prev, [e.target.name]: val }));
@@ -59,34 +76,42 @@ const ProductAddPage = () => {
 
   
 
-  const handleSave = () => {
-    createBook.mutate(formData, {
-      onSuccess: (newBook) => {
-        selectedCategories.forEach((category) => {
-          addCategoryToBook.mutate({ leftId: newBook.id, rightId: category.id });
-          
+  const handleSave = async () => {
+  createBook.mutate(formData, {
+    onSuccess: async (newBook) => {
+      selectedCategories.forEach((category) => {
+        addCategoryToBook.mutate({ leftId: newBook.id, rightId: category.id });
+      });
+      selectedAuthors.forEach((author) => {
+        addAuthorToBook.mutate({ leftId: newBook.id, rightId: author.id });
+      });
+      selectedPublishers.forEach((publisher) => {
+        addPublisherToBook.mutate({ leftId: newBook.id, rightId: publisher.id });
+      });
+      selectedTags.forEach((tag) => {
+        addTagToBook.mutate({ leftId: newBook.id, rightId: tag.id });
+      });
+
+      // Giả lập ảnh với picsum
+      for (let i = 0; i < 6; i++) {
+        const randomId = Math.floor(Math.random() * 1000);
+        const image_url = `https://picsum.photos/id/${randomId}/600/800`;
+        await addImageToBook.mutateAsync({
+          image_url,
+          book_id: newBook.id,
         });
-        selectedAuthors.forEach((author) => {
-          addAuthorToBook.mutate({ leftId: newBook.id, rightId: author.id });
-          console.log(newBook.id)
-          console.log(author.id)
-        });
-        selectedTags.forEach((publisher) => {
-          addPublisherToBook.mutate({ leftId: newBook.id, rightId: publisher.id });
-        });
-        selectedTags.forEach((tag) => {
-          addTagToBook.mutate({ leftId: newBook.id, rightId: tag.id });
-        });
-        alert("Thêm sách thành công!");
-        // có thể điều hướng về danh sách sản phẩm
-        navigate("/admin/books");
-      },
-      onError: (err) => {
-        console.error(err);
-        alert("Có lỗi xảy ra khi thêm sách");
-      },
-    });
-  };
+        // if (i === 0) await setThumbnailImage.mutateAsync(imageId)
+      }
+
+      alert("Thêm sách thành công!");
+      navigate("/admin/books");
+    },
+    onError: (err) => {
+      console.error(err);
+      alert("Có lỗi xảy ra khi thêm sách");
+    },
+  });
+};
   return (
     <Box p={3}>
       {/* Quay lại */}
@@ -115,7 +140,7 @@ const ProductAddPage = () => {
         <TextField fullWidth label="Ngày phát hành" name="publication_date" size="small" type="date" sx={{ mb: 2 }} InputLabelProps={{ shrink: true }} value={formData.publication_date ? formData.publication_date.toISOString().split("T")[0] : ""} onChange={handleDateChange} />
         
         <Autocomplete
-          multiple
+          multiple sx={{ mb: 2 }}
           options={categories}
           getOptionLabel={(option) => option.name}
           value={selectedCategories}
@@ -127,12 +152,10 @@ const ProductAddPage = () => {
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
               <Chip label={option.name} />
-            </li>
-          )}
-        />
+            </li> )} />
 
         <Autocomplete
-          multiple
+          multiple sx={{ mb: 2 }}
           options={authors}
           getOptionLabel={(option) => option.name}
           value={selectedAuthors}
@@ -144,12 +167,10 @@ const ProductAddPage = () => {
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
               <Chip label={option.name} />
-            </li>
-          )}
-        />
+            </li>  )} />
 
         <Autocomplete
-          multiple
+          multiple sx={{ mb: 2 }}
           options={publishers}
           getOptionLabel={(option) => option.name}
           value={selectedPublishers}
@@ -161,12 +182,10 @@ const ProductAddPage = () => {
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
               <Chip label={option.name} />
-            </li>
-          )}
-        />
+            </li> )} />
 
         <Autocomplete
-          multiple
+          multiple sx={{ mb: 2 }}
           options={tags}
           getOptionLabel={(option) => option.name}
           value={selectedTags}
@@ -178,9 +197,35 @@ const ProductAddPage = () => {
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
               <Chip label={option.name} />
-            </li>
-          )}
-        />
+            </li> )}/>
+
+      </Box>
+      <Box padding={3} margin={7} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white" >
+        <Typography fontWeight="bold" mb={2}> Upload & Preview ảnh </Typography>
+        {/* Nút upload */}
+        <Button variant="contained" component="label" sx={{ mb: 2 }}> Chọn ảnh
+          <input type="file" accept="image/*" hidden multiple onChange={handleImageUpload}/>
+        </Button>
+        {/* Swiper preview ảnh */}
+        {images.length > 0 && (
+          <Swiper spaceBetween={10} slidesPerView={3} navigation  modules={[Navigation]} style={{ width: "100%", height: "250px" }}>
+            {images.map((file, index) => (
+              <SwiperSlide key={index}>
+                <Box sx={{ position: "relative", width: "100%", height: "100%",}}>
+                  <img src={URL.createObjectURL(file)}
+                    alt={`preview-${index}`}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px", }} />
+                  <IconButton
+                    size="small"
+                    sx={{ position: "absolute", top: 5,right: 5, bgcolor: "rgba(0,0,0,0.5)", color: "white", "&:hover": { bgcolor: "rgba(0,0,0,0.7)" },}}
+                    onClick={() => handleRemoveImage(index)} >
+                    <Delete fontSize="small" />
+                  </IconButton>
+                </Box>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
 
       </Box>
 

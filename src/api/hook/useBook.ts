@@ -1,6 +1,6 @@
 // src/features/books/hooks/useBooks.ts
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { bookauthorService, bookcategoryService, bookpublisherService, bookService, booktagService } from "../service/productService";
+import { bookauthorService, bookcategoryService, bookpublisherService, bookService, booktagService, imageService } from "../service/productService";
 import type { Book } from "../../core/Types";
 import { useRelationship } from "./useBaseHook";
 
@@ -87,4 +87,37 @@ export const useBookTagRelationship = () => {
     useAddTagToBook: relationshipBookTag.useAdd,
     useRemoveTagFromBook: relationshipBookTag.useRemove,
   };
+};
+
+export const useAddImageToBook = () =>{
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn:(data: {image_url:string, book_id:string}) => imageService.AddImageToBook(data),
+        onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["bookimages"] }); },
+    })
+}
+
+export const useGetImagesBook = (book_id: string) => {
+  return useQuery({
+    queryKey: ["bookimages", book_id],
+    queryFn: () => imageService.GetListImagesBook(book_id),
+    enabled: !!book_id, // chỉ chạy khi có id
+  });
+};
+
+export const useRemoveImageFromBook = () =>{
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn:  (id: string) => imageService.RemoveImageFromBook(id),
+        onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["bookimages"] }); },
+    })
+}
+
+
+export const useSetThumbnailImage = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => imageService.SetThumbnailImage(id),
+    onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["bookimages"] }); },
+  });
 };

@@ -1,6 +1,6 @@
-import { Box, Typography, TextField, Button, Autocomplete, Chip, IconButton,} from "@mui/material";
+import { Box, Typography, TextField, Button, Autocomplete, Chip, IconButton, InputLabel,} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { useAddImageToBook, useBookAuthorRelationship, useBookCategoryRelationship, useBookPublisherRelationship, useBookTagRelationship, useCreateBook } from "../../../api/hook/useBook";
+import { useAddImageToBook, useAddPublisherToBook, useBookAuthorRelationship, useBookCategoryRelationship, useBookTagRelationship, useCreateBook } from "../../../api/hook/useBook";
 import { useState } from "react";
 import type {  Author, Category, Publisher, Tag } from "../../../core/Types";
 import { useAuthorCrud, useCategoryCrud, usePublisherCrud, useTagCrud } from "../../../api/hook/useUltility";
@@ -11,7 +11,6 @@ import { Delete } from "@mui/icons-material";
 const ProductAddPage = () => {
   const {useAddCategoryToBook} = useBookCategoryRelationship();
   const {useAddAuthorToBook} = useBookAuthorRelationship();
-  const {useAddPublisherToBook} = useBookPublisherRelationship();
   const {useAddTagToBook} = useBookTagRelationship();
 
   const {useGetListCategories} = useCategoryCrud();
@@ -48,6 +47,12 @@ const ProductAddPage = () => {
     
   });
 
+  const [publisherDetails, setPublisherDetails] = useState<Record<string, {
+  ISBN: string;
+  year: string;
+  edition: string;
+}>>({});
+
   const [images, setImages] = useState<File[]>([]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,6 +68,15 @@ const ProductAddPage = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.type === "number" ? Number(e.target.value) : e.target.value;
     setFormData(prev => ({ ...prev, [e.target.name]: val }));
+  };
+
+   const handlePublisherChange = (publisherId: string, field: string) =>
+  (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.type === "number" ? Number(e.target.value) : e.target.value;
+    setPublisherDetails((prev) => ({
+      ...prev,
+      [publisherId]: { ...prev[publisherId], [field]: val },
+    }));
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,8 +100,15 @@ const ProductAddPage = () => {
         addAuthorToBook.mutate({ leftId: newBook.id, rightId: author.id });
       });
       selectedPublishers.forEach((publisher) => {
-        addPublisherToBook.mutate({ leftId: newBook.id, rightId: publisher.id });
-      });
+          const details = publisherDetails[publisher.id] || {};
+          addPublisherToBook.mutate({
+            product_id: newBook.id,
+            publisher_id: publisher.id,
+            edition: details.edition,
+            year: details.year,
+            isbn: details.ISBN,
+          });
+        });
       selectedTags.forEach((tag) => {
         addTagToBook.mutate({ leftId: newBook.id, rightId: tag.id });
       });
@@ -95,7 +116,7 @@ const ProductAddPage = () => {
       // Giả lập ảnh với picsum
       for (let i = 0; i < 6; i++) {
         const randomId = Math.floor(Math.random() * 1000);
-        const image_url = `https://picsum.photos/id/${randomId}/600/800`;
+        const image_url = `https://picsum.photos/id/${randomId}/400/600`;
         await addImageToBook.mutateAsync({
           image_url,
           book_id: newBook.id,
@@ -168,21 +189,36 @@ const ProductAddPage = () => {
             <li {...props} key={option.id}>
               <Chip label={option.name} />
             </li>  )} />
+          <Autocomplete multiple  sx={{ mb: 2 }}
+              options={publishers}
+              getOptionLabel={(option) => option.name}
+              value={selectedPublishers}
+              onChange={(_e, value) => {
+                setSelectedPublishers(value);
 
-        <Autocomplete
-          multiple sx={{ mb: 2 }}
-          options={publishers}
-          getOptionLabel={(option) => option.name}
-          value={selectedPublishers}
-          onChange={(_e, value) => setSelectedPublishers(value)}
-          renderInput={(params) => (
-            <TextField {...params} variant="outlined" label="Chọn nhà xuất bản" />
-          )}
-          // dùng renderOption thay cho renderTags
-          renderOption={(props, option) => (
-            <li {...props} key={option.id}>
-              <Chip label={option.name} />
-            </li> )} />
+                // Cập nhật state chi tiết: nếu bỏ chọn thì xoá
+                const newDetails: typeof publisherDetails = {};
+                value.forEach(pub => {
+                  newDetails[pub.id] = publisherDetails[pub.id] || { ISBN: "", year: "", edition: "" };
+                });
+                setPublisherDetails(newDetails);
+              }}
+              renderInput={(params) => (
+                <TextField {...params} variant="outlined" label="Chọn nhà xuất bản" />
+              )}
+              renderOption={(props, option) => (
+                <li {...props} key={option.id}>
+                  <Chip label={option.name} />
+                </li>
+              )}
+            />
+        {selectedPublishers.map((pub) => (
+            <Box key={pub.id} sx={{ border: "1px solid #ddd", p: 2, mb: 2, borderRadius: 2 }}>
+              <Typography fontWeight="bold" mb={1}>{pub.name}</Typography>
+              <TextField fullWidth label="ISBN" size="small" sx={{ mb: 2 }} value={publisherDetails[pub.id]?.ISBN || ""} onChange={handlePublisherChange(pub.id, "ISBN")}/>
+              <TextField fullWidth label="Year" size="small"  sx={{ mb: 2 }} value={publisherDetails[pub.id]?.year || ""} onChange={handlePublisherChange(pub.id, "year")}/>
+              <TextField fullWidth label="Edition" size="small"  sx={{ mb: 2 }}  value={publisherDetails[pub.id]?.edition || ""} onChange={handlePublisherChange(pub.id, "edition")} />
+            </Box>))}
 
         <Autocomplete
           multiple sx={{ mb: 2 }}

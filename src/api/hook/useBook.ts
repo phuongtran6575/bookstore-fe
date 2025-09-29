@@ -11,7 +11,7 @@ export const useGetListBooks = () => {
   });
 };
 
-export const useGetBookbyId = (id:string) =>{
+export const useGetBookbyId = (id: string) =>{
     return useQuery({
         queryKey: ["book", id],   // cache riêng cho từng id
         queryFn: () => bookService.getById(id),
@@ -71,14 +71,6 @@ export const useBookCategoryRelationship = () => {
   };
 };
 
-export const useBookPublisherRelationship = () => {
-  const relationshipBookPublisher = useRelationship<string, string>("bookpublishers", bookpublisherService);
-  return {
-    useGetPublishersByBookId: relationshipBookPublisher.useGetAll,
-    useAddPublisherToBook: relationshipBookPublisher.useAdd,
-    useRemovePublisherFromBook: relationshipBookPublisher.useRemove,
-  };
-};
 
 export const useBookTagRelationship = () => {
   const relationshipBookTag = useRelationship<string, string>("booktags", booktagService);
@@ -88,6 +80,30 @@ export const useBookTagRelationship = () => {
     useRemoveTagFromBook: relationshipBookTag.useRemove,
   };
 };
+
+export const useAddPublisherToBook = () =>{
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { product_id: string; publisher_id: string; edition?: string; year?: string; isbn?: string}) => bookpublisherService.AddPublisherToBook(data),
+    onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["bookpublishers"] }); }
+  })
+}
+
+export const useGetListPublishersBook = (book_id: string) => {
+  return useQuery({
+    queryKey: ["bookpublishers", book_id],
+    queryFn: () => bookpublisherService.GetListPublishersBook(book_id),
+    enabled: !!book_id, // chỉ chạy khi có id
+  });
+};
+
+export const useRemovePublisherFromBook = () =>{
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn:  ({ product_id, publisher_id }: { product_id: string; publisher_id: string }) => bookpublisherService.RemovePublisherFromBook(product_id, publisher_id),
+        onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["bookpublishers"] }); },
+    })
+}
 
 export const useAddImageToBook = () =>{
     const queryClient = useQueryClient();

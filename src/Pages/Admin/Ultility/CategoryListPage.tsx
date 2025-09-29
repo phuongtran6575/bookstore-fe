@@ -18,7 +18,7 @@ const CategoryListPage = () => {
   if (error) return <p>Error loading books</p>;
 
   const handleEdit = (id: string) => {
-    //navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/categoryEdit/${id}`);
     console.log("Edit product", id)
   
   };

@@ -32,9 +32,24 @@ export const bookcategoryService = createRelationshipService("bookcategories","p
 
 export const bookauthorService = createRelationshipService("bookauthors","product_id","author_id");
 
-export const bookpublisherService = createRelationshipService("bookpublishers","product_id","publisher_id");
+
 
 export const booktagService = createRelationshipService("booktags","product_id","tag_id");
+
+export const bookpublisherService = {
+  GetListPublishersBook: async (book_id: string) =>{
+    const res = await axiosAPI.get(`/bookpublishers/${book_id}`)
+    return res.data
+  },
+  RemovePublisherFromBook: async (product_id: string, publisher_id: string) =>{
+    const res = await axiosAPI.delete(`/bookpublishers/${product_id}/${publisher_id}`)
+    return res.data
+  }, 
+  AddPublisherToBook : async (data: { product_id: string; publisher_id: string; edition?: string; year?: string; isbn?: string}) =>{
+    const res = await axiosAPI.post("/bookpublishers", data )
+    return res.data
+  }
+}
 
 export const imageService = {
     AddImageToBook: async (data: {image_url: string, book_id: string})=>{

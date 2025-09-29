@@ -18,7 +18,7 @@ const AuthorListPage = () => {
   if (error) return <p>Error loading books</p>;
 
   const handleEdit = (id: string) => {
-    //navigate(`/admin/productDetailandEdit/${id}`);
+    navigate(`/admin/authorEdit/${id}`);
     console.log("Edit product", id)
   
   };

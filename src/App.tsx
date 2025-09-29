@@ -44,6 +44,11 @@ import CategoryAddPage from './Pages/Admin/Ultility/CategoryAddPage'
 import AuthorAddPage from './Pages/Admin/Ultility/AuthorAddPage'
 import PublisherAddPage from './Pages/Admin/Ultility/PublisherAddPage'
 import TagAddPage from './Pages/Admin/Ultility/TagAddPage'
+import AuthorEditPage from './Pages/Admin/Ultility/AuthorEditPage'
+import CategoryEditPage from './Pages/Admin/Ultility/CategoryEditPage'
+import PublisherEditPage from './Pages/Admin/Ultility/PublisherEditPage'
+import TagEditPage from './Pages/Admin/Ultility/TagEditPage'
+import ClientProductDetailPage from './Pages/Client/ClientProductDetailPage'
 
 
 
@@ -57,6 +62,7 @@ function App() {
             <Route index element={<HomePage/>}></Route>
             <Route path='home' element={<HomePage/>}></Route>
             <Route path='category' element={<CategoryPage/>}></Route>
+            <Route path='product/:id' element={<ClientProductDetailPage/>}></Route>
             <Route path='auth' element={<AuthLayout/>}>
               <Route index element={<LoginPage/>}></Route>
               <Route path='login' element={<LoginPage/>}></Route>
@@ -87,18 +93,22 @@ function App() {
             <Route path='categories' element={<CategoryListPage/>}></Route>
             <Route path='categoryAdd' element={<CategoryAddPage/>}></Route>
             <Route path='categoryDetail/:id' element={<CategoryDetailPage/>}></Route>
+            <Route path='categoryEdit/:id' element={<CategoryEditPage/>}></Route>
 
             <Route path='authors' element={<AuthorListPage/>}></Route>
             <Route path='authorAdd' element={<AuthorAddPage/>}></Route>
             <Route path='authorDetail/:id' element={<AuthorDetailPage/>}></Route>
+            <Route path='authorEdit/:id' element={<AuthorEditPage/>}></Route>
 
             <Route path='publishers' element={<PublisherListPage/>}></Route>
             <Route path='publisherAdd' element={<PublisherAddPage/>}></Route>
             <Route path='publisherDetail/:id' element={<PublisherDetailPage/>}></Route>
+            <Route path='publisherEdit/:id' element={<PublisherEditPage/>}></Route>
 
             <Route path='tags' element={<TagListPage/>}></Route>
             <Route path='tagAdd' element={<TagAddPage/>}></Route>
             <Route path='tagDetail/:id' element={<TagDetailPage/>}></Route>
+            <Route path='tagEdit/:id' element={<TagEditPage/>}></Route>
             
             <Route path='orders' element={<OrderListPage/>}></Route>
             

@@ -16,7 +16,6 @@ const ProductDetailPage = () => {
 
   if (!id) return <p>No product selected</p>;
   const { data: images, isLoading: isLoadingImages, error: errorImages } = useGetImagesBook(id || "");
-  console.log(images)
   const { data: book, isLoading, error } = useGetBookbyId(id);
   const {data: categories, isLoading: isLoadingCategories, error: errorCategories  } = useGetCategoriesByBookId(id);
   const {data: authors, isLoading: isLoadingAuthors, error: errorAuthors  } = useGetAuthorsByBookId(id);

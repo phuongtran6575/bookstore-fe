@@ -1,34 +1,54 @@
-import { useState } from "react";
-import {Box,Typography,InputBase,IconButton,Divider,Drawer,List,ListItem,ListItemText,useMediaQuery,ListItemButton,Menu as MuiMenu,MenuItem,} from "@mui/material";
-import {MenuBook,Search,ShoppingCart,Person,Menu,ExpandMore,ExpandLess,} from "@mui/icons-material";
+import { useEffect, useRef, useState } from "react";
+import { Box, Typography, InputBase, IconButton, Divider, Drawer, List, ListItem, ListItemText, useMediaQuery, ListItemButton, Menu as MuiMenu, MenuItem, Paper, } from "@mui/material";
+import { MenuBook, Search, ShoppingCart, Person, Menu, ExpandMore, ExpandLess, } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../core/store/authStore";
+import Grid2 from "@mui/material/Grid";
+import { useCategoryCrud } from "../../api/hook/useUltility";
+import { buildCategoryTree } from "../../core/helper/categoryTreeBuild";
+import type { Category } from "../../core/Types";
+
 
 const allowedRoles = ["admin"];
 
 const Header = () => {
   const navigate = useNavigate();
+  const { useGetListCategories } = useCategoryCrud();
+
+  const {
+    data: categories,
+    isLoading: isLoadingCategories,
+    error: errorCategories,
+  } = useGetListCategories();
+
+  const [treeCategories, setTreeCategories] = useState<any[]>([]);
   const isMobile = useMediaQuery("(max-width:768px)");
   const [openMenu, setOpenMenu] = useState(false);
 
-  // state cho account menu
+  // account menu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const accountMenuOpen = Boolean(anchorEl);
-  
+
+  // category menu
+  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
 
   const token = useAuthStore((state) => state.token);
-  const roles = useAuthStore(state => state.roles)
+  const roles = useAuthStore((state) => state.roles);
   const logout = useAuthStore((state) => state.logout);
 
-  const hasRole = roles.some(r => allowedRoles.includes(r));
+  const hasRole = roles.some((r) => allowedRoles.includes(r));
 
   const navItems = [
-    { name: "Trang Chủ", link: "/" },
-    { name: "Danh Mục Sách", link: "/" },
-    { name: "Sách Bán Chạy", link: "/" },
-    { name: "Khuyến Mãi", link: "/" },
-    { name: "Blog/Tin tức", link: "/" },
+    { id: 1, name: "Trang Chủ", link: "/" },
+    { id: 2, name: "Danh Mục Sách", link: "/category" },
+    { id: 3, name: "Sách Bán Chạy", link: "/" },
+    { id: 4, name: "Khuyến Mãi", link: "/" },
+    { id: 5, name: "Blog/Tin tức", link: "/" },
   ];
+
+  useEffect(() => {
+    setTreeCategories(buildCategoryTree(categories || []));
+  }, [categories]);
 
   const handleAccountClick = (event: React.MouseEvent<HTMLElement>) => {
     if (!token) {
@@ -37,18 +57,45 @@ const Header = () => {
       setAnchorEl(event.currentTarget);
     }
   };
+  const handleAccountClose = () => setAnchorEl(null);
 
-  const handleAccountClose = () => {
-    setAnchorEl(null);
-  };
+  const handleCategoryEnter = () => setCategoryMenuOpen(true);
+  const handleCategoryLeave = () => setCategoryMenuOpen(false);
+
+  if (isLoadingCategories) return <p>Loading...</p>;
+  if (errorCategories) return <p>Failed to load categories</p>;
 
   return (
-    <Box sx={{ width: "100%", borderBottom: "1px solid #e5e7eb", backgroundColor: "white" }}>
+    <Box
+      sx={{
+        width: "100%",
+        borderBottom: "1px solid #e5e7eb",
+        backgroundColor: "white",
+        position: "relative",
+      }}
+    >
       {/* Top bar */}
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", px: 2, py: 1.5 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          px: 2,
+          py: 1.5,
+        }}
+      >
         {/* Logo */}
-        <Box component={Link}  to={"/"}
-          sx={{ display: "flex", alignItems: "center", gap: 1, textDecoration: "none", color: "inherit" }} >
+        <Box
+          component={Link}
+          to={"/"}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
           <MenuBook sx={{ color: "orange" }} />
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             Bookish
@@ -57,9 +104,27 @@ const Header = () => {
 
         {/* Search */}
         {!isMobile && (
-          <Box sx={{  display: "flex", alignItems: "center", bgcolor: "#374151", borderRadius: 1, overflow: "hidden", width: "40%", }}>
-            <InputBase sx={{ flex: 1, px: 2, color: "white" }} placeholder="Tìm kiếm tên sách, tác giả..." />
-            <IconButton sx={{ bgcolor: "orange", borderRadius: 0, "&:hover": { bgcolor: "#cc8400" } }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              bgcolor: "#374151",
+              borderRadius: 1,
+              overflow: "hidden",
+              width: "40%",
+            }}
+          >
+            <InputBase
+              sx={{ flex: 1, px: 2, color: "white" }}
+              placeholder="Tìm kiếm tên sách, tác giả..."
+            />
+            <IconButton
+              sx={{
+                bgcolor: "orange",
+                borderRadius: 0,
+                "&:hover": { bgcolor: "#cc8400" },
+              }}
+            >
               <Search sx={{ color: "white" }} />
             </IconButton>
           </Box>
@@ -67,10 +132,10 @@ const Header = () => {
 
         {/* Cart + User + Menu */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <IconButton> <ShoppingCart /> </IconButton>
+          <IconButton>
+            <ShoppingCart />
+          </IconButton>
 
-          {/* Nếu chưa login → Person icon để login */}
-          {/* Nếu đã login → mở account menu */}
           <IconButton onClick={handleAccountClick}>
             <Person />
             {token && (accountMenuOpen ? <ExpandLess /> : <ExpandMore />)}
@@ -89,13 +154,127 @@ const Header = () => {
 
       {/* Nav bar (desktop) */}
       {!isMobile && (
-        <Box sx={{ display: "flex", justifyContent: "center", gap: 4, py: 1 }}>
-          {navItems.map((item, i) => (
-            <Typography component={Link} to={item.link} key={i}  variant="body2"
-              sx={{ textDecoration: "none", color: "inherit", fontWeight: 500, cursor: "pointer", "&:hover": { color: "orange" }, }} >
-              {item.name}
-            </Typography>
-          ))}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 4,
+            py: 1,
+          }}
+        >
+          {navItems.map((item) =>
+            item.id === 2 ? (
+              <Box
+                key={item.id}
+                onMouseEnter={handleCategoryEnter}
+                onMouseLeave={handleCategoryLeave}
+                sx={{ position: "relative" }}
+              >
+                {/* Trigger */}
+                <Typography
+                  variant="body2"
+                  component={Link}
+                  to={item.link}
+                  sx={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    "&:hover": { color: "orange" },
+                  }}
+                >
+                  {item.name}
+                </Typography>
+
+                {/* Mega Menu */}
+                {categoryMenuOpen && (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "100%",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      zIndex: 1200,
+                      width: "100vw", // full chiều ngang
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Paper sx={{ p: 3, maxWidth: 1000, width: "100%" }}>
+                      {treeCategories.length > 0 ? (
+                        <Grid2 container spacing={4}>
+                          {treeCategories.map((parent) => (
+                            <Grid2 size={3} key={parent.id}>
+                              <Typography
+                                component={Link}
+                                to={`/category/${parent.slug}`}
+                                variant="subtitle1"
+                                sx={{
+                                  display: "block",
+                                  color: "inherit",
+                                  textDecoration: "none",
+                                  "&:hover": { color: "orange" },
+                                  fontWeight: "bold",
+                                  mb: 1,
+                                }}
+                              >
+                                {parent.name}
+                              </Typography>
+                              {parent.children.map((child: any) => (
+                                <Typography
+                                  key={child.id}
+                                  component={Link}
+                                  to={`/category/${child.slug}`}
+                                  variant="body2"
+                                  sx={{
+                                    display: "block",
+                                    color: "inherit",
+                                    textDecoration: "none",
+                                    mb: 0.5,
+                                    "&:hover": { color: "orange" },
+                                  }}
+                                >
+                                  {child.name}
+                                </Typography>
+                              ))}
+                            </Grid2>
+                          ))}
+                        </Grid2>
+                      ) : (
+                        <Box
+                          sx={{
+                            textAlign: "center",
+                            py: 5,
+                            color: "text.secondary",
+                          }}
+                        >
+                          <Typography variant="body2">
+                            Chưa có danh mục nào
+                          </Typography>
+                        </Box>
+                      )}
+                    </Paper>
+                  </Box>
+                )}
+              </Box>
+            ) : (
+              <Typography
+                key={item.id}
+                variant="body2"
+                component={Link}
+                to={item.link}
+                sx={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  "&:hover": { color: "orange" },
+                }}
+              >
+                {item.name}
+              </Typography>
+            )
+          )}
         </Box>
       )}
 
@@ -106,8 +285,8 @@ const Header = () => {
             Menu
           </Typography>
           <List>
-            {navItems.map((item, i) => (
-              <ListItem key={i} disablePadding>
+            {navItems.map((item) => (
+              <ListItem key={item.id} disablePadding>
                 <ListItemButton onClick={() => navigate(item.link)}>
                   <ListItemText primary={item.name} />
                 </ListItemButton>
@@ -117,21 +296,39 @@ const Header = () => {
         </Box>
       </Drawer>
 
-      {/* Account Menu (chỉ khi có token) */}
+      {/* Account Menu */}
       {token && (
         <MuiMenu
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           anchorEl={anchorEl}
           open={accountMenuOpen}
           onClose={handleAccountClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          transformOrigin={{ vertical: "top", horizontal: "right" }}>
-          {hasRole && <MenuItem onClick={() => { handleAccountClose(); navigate("/admin"); }}>
-            Truy cập trang quản lý
-              </MenuItem>}
-          <MenuItem onClick={() => { handleAccountClose(); navigate("/account/accountdashboard"); }}>
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          {hasRole && (
+            <MenuItem
+              onClick={() => {
+                handleAccountClose();
+                navigate("/admin");
+              }}
+            >
+              Truy cập trang quản lý
+            </MenuItem>
+          )}
+          <MenuItem
+            onClick={() => {
+              handleAccountClose();
+              navigate("/account/accountdashboard");
+            }}
+          >
             Tài khoản của tôi
           </MenuItem>
-          <MenuItem onClick={() => { handleAccountClose(); navigate("/account/orders"); }}>
+          <MenuItem
+            onClick={() => {
+              handleAccountClose();
+              navigate("/account/orders");
+            }}
+          >
             Đơn hàng
           </MenuItem>
           <MenuItem

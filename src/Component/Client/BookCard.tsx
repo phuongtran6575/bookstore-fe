@@ -1,31 +1,31 @@
 import { Card, CardContent, CardMedia, Box, Typography, Button, Rating } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useGetImagesBook } from "../../api/hook/useBook";
 
 type ProductCardProps = {
-    id: number;
-    title: string;
-    author: string;
-    price: string;
+    product: any;
+    author?: string
     oldPrice?: string;
     discount?: string;
-    image: string;
-    rating: number;
-    reviews: number;
+    rating?: number;
+    reviews?: number;
     badge?: string;
 };
 
 const BookCard = ({
-    id,
-    title,
+    product,
     author,
-    price,
     oldPrice,
     discount,
-    image,
     rating,
     reviews,
     badge,
 }: ProductCardProps) => {
+    const { data: images, isLoading: isLoadingImages, error: errorImages } = useGetImagesBook(product.id)
+    if (isLoadingImages) return <p>Loading Images</p>
+    if (errorImages) return <p>error Images</p>
+    const defaultImage = images?.find((img: any) => img.is_thumbnail) || images?.[0];
+    console.log(defaultImage)
     return (
         <Card
             sx={{
@@ -51,7 +51,7 @@ const BookCard = ({
                     component="img"
                     height="200"
                     sx={{ transition: "transform 0.3s ease" }}
-                    image={image}
+                    image={defaultImage.image_url}
                 />
                 {badge && (
                     <Box
@@ -112,7 +112,7 @@ const BookCard = ({
             <CardContent>
                 <Typography
                     component={Link}
-                    to={`/product/${id}`}
+                    to={`/product/${product.id}`}
                     fontWeight="bold"
                     sx={{
                         textDecoration: "none",
@@ -120,11 +120,11 @@ const BookCard = ({
                         "&:hover": { color: "primary.main" },
                     }}
                 >
-                    {title}
+                    {product.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                {author && (<Typography variant="body2" color="text.secondary">
                     {author}
-                </Typography>
+                </Typography>)}
                 <Box display="flex" alignItems="center" mt={1}>
                     <Rating value={rating} precision={0.5} readOnly size="small" />
                     <Typography variant="body2" ml={0.5}>
@@ -133,7 +133,7 @@ const BookCard = ({
                 </Box>
                 <Box mt={1} display="flex" alignItems="center" gap={1}>
                     <Typography color="error" fontWeight="bold">
-                        {price}
+                        {product.price}
                     </Typography>
                     {oldPrice && (
                         <Typography

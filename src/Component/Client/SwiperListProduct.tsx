@@ -5,57 +5,19 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import BookCard from "./BookCard";
 
-const SwiperListProduct = () => {
-  const products = [
-    {
-      id: 1,
-      title: "Sách Thiếu Nhi 8",
-      author: "Tác giả E",
-      price: "62.000 ₫",
-      image: "https://picsum.photos/id/1011/400/250",
-      rating: 4,
-      reviews: 378,
-      badge: "Bestseller",
-    },
-    {
-      id: 2,
-      title: "Sách Thiếu Nhi 13",
-      author: "Tác giả J",
-      price: "155.000 ₫",
-      oldPrice: "205.000 ₫",
-      discount: "-24%",
-      image: "https://picsum.photos/id/1012/400/250",
-      rating: 4,
-      reviews: 378,
-    },
-    {
-      id: 3,
-      title: "Sách Thiếu Nhi 18",
-      author: "Tác giả O",
-      price: "196.000 ₫",
-      image: "https://picsum.photos/id/1013/400/250",
-      rating: 4,
-      reviews: 274,
-    },
-    {
-      id: 4,
-      title: "Sách Thiếu Nhi 18",
-      author: "Tác giả O",
-      price: "196.000 ₫",
-      image: "https://picsum.photos/id/1013/400/250",
-      rating: 4,
-      reviews: 274,
-    },
-    {
-      id: 5,
-      title: "Sách Thiếu Nhi 18",
-      author: "Tác giả O",
-      price: "196.000 ₫",
-      image: "https://picsum.photos/id/1013/400/250",
-      rating: 4,
-      reviews: 274,
-    },
-  ];
+
+type SwiperListProductProps = {
+  products: any[];
+  author?: string;
+  oldPrice?: string;
+  discount?: string;
+  rating?: number;
+  reviews?: number;
+  badge?: string;
+};
+
+const SwiperListProduct = ({ products, author, oldPrice, discount, rating, reviews, badge }: SwiperListProductProps) => {
+
 
   return (
     <Box sx={{ position: "relative", py: 4 }}>
@@ -74,13 +36,13 @@ const SwiperListProduct = () => {
         breakpoints={{
           0: { slidesPerView: 1 },
           768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
+          1024: { slidesPerView: 5 },
         }}
         style={{ padding: "20px 0" }}
       >
-        {products.map((p) => (
-          <SwiperSlide key={p.id}>
-            <BookCard {...p} />
+        {products.map((product) => (
+          <SwiperSlide key={product.id}>
+            <BookCard product={product} />
           </SwiperSlide>
         ))}
 

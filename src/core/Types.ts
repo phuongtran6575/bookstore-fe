@@ -7,7 +7,7 @@ export interface Book{
     sale_price: number
     stock_quantity: number
     page_count: number
-    ISBN: string
+    size: string
     cover_type: string
     publication_date?:  Date | null;
     created_at: Date
@@ -19,7 +19,7 @@ export interface BookCreate {
   sku: string;
   price: number;
   sale_price?: number;
-  ISBN?: string;
+  size?: string;
   stock_quantity?: number;
   page_count?: number;
   cover_type?: string;

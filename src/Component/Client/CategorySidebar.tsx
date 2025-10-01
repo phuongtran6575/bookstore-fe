@@ -10,6 +10,7 @@ import {
     FormControlLabel,
     Divider,
     Button,
+    FormGroup,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
@@ -17,11 +18,19 @@ import { useAuthorCrud } from '../../api/hook/useUltility';
 
 
 
+
 const CategorySidebar = () => {
     const { useGetListAuthors } = useAuthorCrud();
-    const { data: authors = [], isLoading: isLoadingAuthors, error: errorAuthors } = useGetListAuthors();
+    const {
+        data: authors = [],
+        isLoading: isLoadingAuthors,
+        error: errorAuthors,
+    } = useGetListAuthors();
+
     const [price, setPrice] = useState<number[]>([0, 500000]);
     const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
+    const [search, setSearch] = useState("");
+    const [showAll, setShowAll] = useState(false);
 
     const handlePriceChange = (_: Event, newValue: number | number[]) => {
         setPrice(newValue as number[]);
@@ -35,6 +44,12 @@ const CategorySidebar = () => {
         );
     };
 
+    const filteredAuthors = authors.filter((a) =>
+        a.name.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const visibleAuthors = showAll ? filteredAuthors : filteredAuthors.slice(0, 6);
+
     return (
         <Box sx={{ width: 280, p: 2, borderRight: "1px solid #eee" }}>
             {/* Tiêu đề */}
@@ -43,11 +58,16 @@ const CategorySidebar = () => {
             </Typography>
 
             {/* Bộ lọc + Xóa tất cả */}
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                mb={2}
+            >
                 <Typography variant="subtitle1" fontWeight="bold">
                     Bộ lọc
                 </Typography>
-                <Button size="small" color="warning">
+                <Button size="small" color="warning" onClick={() => setSelectedAuthors([])}>
                     Xóa tất cả
                 </Button>
             </Box>
@@ -67,8 +87,12 @@ const CategorySidebar = () => {
                         step={10000}
                     />
                     <Box display="flex" justifyContent="space-between">
-                        <Typography variant="body2">{price[0].toLocaleString()}đ</Typography>
-                        <Typography variant="body2">{price[1].toLocaleString()}đ</Typography>
+                        <Typography variant="body2">
+                            {price[0].toLocaleString()}đ
+                        </Typography>
+                        <Typography variant="body2">
+                            {price[1].toLocaleString()}đ
+                        </Typography>
                     </Box>
                 </AccordionDetails>
             </Accordion>
@@ -83,20 +107,33 @@ const CategorySidebar = () => {
                         size="small"
                         placeholder="Tìm tác giả..."
                         fullWidth
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                         sx={{ mb: 1 }}
                     />
-                    {authors.map((author) => (
-                        <FormControlLabel
-                            key={author.id}
-                            control={
-                                <Checkbox
-                                    checked={selectedAuthors.includes(author.id)}
-                                    onChange={() => handleAuthorToggle(author.id)}
-                                />
-                            }
-                            label={author.name}
-                        />
-                    ))}
+                    <FormGroup>
+                        {visibleAuthors.map((author) => (
+                            <FormControlLabel
+                                key={author.id}
+                                control={
+                                    <Checkbox
+                                        checked={selectedAuthors.includes(author.id)}
+                                        onChange={() => handleAuthorToggle(author.id)}
+                                    />
+                                }
+                                label={author.name}
+                            />
+                        ))}
+                    </FormGroup>
+                    {filteredAuthors.length > 6 && (
+                        <Button
+                            size="small"
+                            onClick={() => setShowAll(!showAll)}
+                            sx={{ mt: 1 }}
+                        >
+                            {showAll ? "Thu gọn" : "Xem thêm"}
+                        </Button>
+                    )}
                 </AccordionDetails>
             </Accordion>
 
@@ -121,5 +158,6 @@ const CategorySidebar = () => {
             </Accordion>
         </Box>
     );
-}
+};
+
 export default CategorySidebar;

@@ -13,17 +13,17 @@ import { Delete, Star, StarBorder } from "@mui/icons-material";
 const ProductEditPage = () => {
   const { id } = useParams<{ id: string }>();
   const { data: book, isLoading, error } = useGetBookbyId(id || "");
-  
 
-  const {useGetAuthorsByBookId ,useAddAuthorToBook, useRemoveAuthorFromBook} = useBookAuthorRelationship()
-  const {useGetCategoriesByBookId ,useAddCategoryToBook, useRemoveCategoryFromBook} = useBookCategoryRelationship()
-  const {useGetTagsByBookId ,useAddTagToBook, useRemoveTagFromBook} = useBookTagRelationship() 
 
-  const {useGetListTags} = useTagCrud()
-  const {useGetListAuthors} = useAuthorCrud()
-  const {useGetListCategories} = useCategoryCrud()
-  const {useGetListPublishers} = usePublisherCrud()
-  
+  const { useGetAuthorsByBookId, useAddAuthorToBook, useRemoveAuthorFromBook } = useBookAuthorRelationship()
+  const { useGetCategoriesByBookId, useAddCategoryToBook, useRemoveCategoryFromBook } = useBookCategoryRelationship()
+  const { useGetTagsByBookId, useAddTagToBook, useRemoveTagFromBook } = useBookTagRelationship()
+
+  const { useGetListTags } = useTagCrud()
+  const { useGetListAuthors } = useAuthorCrud()
+  const { useGetListCategories } = useCategoryCrud()
+  const { useGetListPublishers } = usePublisherCrud()
+
   const addAuthor = useAddAuthorToBook()
   const removeAuthor = useRemoveAuthorFromBook()
   const addCategory = useAddCategoryToBook()
@@ -37,16 +37,16 @@ const ProductEditPage = () => {
 
 
   const { data: tags, isLoading: isLoadingTags, error: errorTags } = useGetTagsByBookId(id || "");
-  const{ data: allTags =[]} = useGetListTags();
-  
+  const { data: allTags = [] } = useGetListTags();
+
   const { data: authors, isLoading: isLoadingAuthors, error: errorAuthors } = useGetAuthorsByBookId(id || "");
-  const{ data: allAuthors =[]} = useGetListAuthors(); 
+  const { data: allAuthors = [] } = useGetListAuthors();
 
   const { data: publishers, isLoading: isLoadingPublishers, error: errorPublishers } = useGetListPublishersBook(id || "");
-  const{ data: allPublishers =[]} = useGetListPublishers(); 
+  const { data: allPublishers = [] } = useGetListPublishers();
 
   const { data: categories, isLoading: isLoadinCategories, error: errorCategories } = useGetCategoriesByBookId(id || "");
-  const{ data: allCategories =[]} = useGetListCategories(); 
+  const { data: allCategories = [] } = useGetListCategories();
 
   const { data: images, isLoading: isLoadingImages, error: errorImages } = useGetImagesBook(id || "");
 
@@ -68,7 +68,7 @@ const ProductEditPage = () => {
     price: 0,
     sale_price: 0,
     stock_quantity: 0,
-    ISBN:"",
+    size: "",
     page_count: 0,
     cover_type: "",
     publication_date: null as Date | null,
@@ -83,59 +83,59 @@ const ProductEditPage = () => {
         price: book.price || 0,
         sale_price: book.sale_price || 0,
         stock_quantity: book.stock_quantity || 0,
-        ISBN: book.ISBN || "",
+        size: book.size || "",
         page_count: book.page_count || 0,
         cover_type: book.cover_type || "",
-        publication_date: book.publication_date ? new Date(book.publication_date) : null,      
+        publication_date: book.publication_date ? new Date(book.publication_date) : null,
       });
     }
   }, [book]);
 
   useEffect(() => {
     if (categories) {
-      setSelectedCategories(categories); 
+      setSelectedCategories(categories);
     }
   }, [categories]);
 
   useEffect(() => {
     if (authors) {
-      setSelectedAuthors(authors); 
+      setSelectedAuthors(authors);
     }
   }, [authors]);
 
   useEffect(() => {
     if (publishers) {
-      setSelectedPublishers(publishers); 
+      setSelectedPublishers(publishers);
     }
   }, [publishers]);
   useEffect(() => {
     if (tags) {
-      setSelectedTags(tags); 
+      setSelectedTags(tags);
     }
   }, [tags]);
   useEffect(() => {
-  if (images) {
-    setSelectedImages(images);
-  }
-}, [images]);
+    if (images) {
+      setSelectedImages(images);
+    }
+  }, [images]);
 
   if (!id) return <p>No user selected</p>;
-  if (isLoading || isLoadingTags || isLoadingAuthors || isLoadingPublishers || isLoadinCategories ||isLoadingImages) return <p>Loading user...</p>;
-  if (error || errorTags || errorAuthors || errorPublishers ||errorCategories || errorImages) return <p>Failed to load user</p>;
+  if (isLoading || isLoadingTags || isLoadingAuthors || isLoadingPublishers || isLoadinCategories || isLoadingImages) return <p>Loading user...</p>;
+  if (error || errorTags || errorAuthors || errorPublishers || errorCategories || errorImages) return <p>Failed to load user</p>;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
- const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, publication_date:new Date(e.target.value)  }));
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, publication_date: new Date(e.target.value) }));
   };
 
-  
+
   const handleRemoveImage = (id: string) => {
     removeImage.mutate(id);
   };
-  
-   const handleSetThumbnail = (id: string) => {
+
+  const handleSetThumbnail = (id: string) => {
     setThumbnail.mutate(id);
   };
 
@@ -163,7 +163,7 @@ const ProductEditPage = () => {
       removeCategory.mutate({ leftId: id!, rightId: category.id });
     });
 
-    setSelectedCategories(value); 
+    setSelectedCategories(value);
   };
 
   const handleAuthorChange = (_e: any, value: any[]) => {
@@ -182,7 +182,7 @@ const ProductEditPage = () => {
       removeAuthor.mutate({ leftId: id!, rightId: author.id });
     });
 
-    setSelectedAuthors(value); 
+    setSelectedAuthors(value);
   };
 
   const handlePublisherChange = (_e: any, value: any[]) => {
@@ -201,7 +201,7 @@ const ProductEditPage = () => {
       removePublisher.mutate({ product_id: id!, publisher_id: publisher.id });
     });
 
-    setSelectedPublishers(value); 
+    setSelectedPublishers(value);
   };
 
   const handleTagChange = (_e: any, value: any[]) => {
@@ -220,7 +220,7 @@ const ProductEditPage = () => {
       removeTag.mutate({ leftId: id!, rightId: tag.id });
     });
 
-    setSelectedTags(value); 
+    setSelectedTags(value);
   };
 
   return (
@@ -234,18 +234,18 @@ const ProductEditPage = () => {
       </Typography>
 
       <Box padding={3} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
-        <TextField  defaultValue={book?.title} fullWidth label="Tên sách" size="small" sx={{ mb: 2 }} />
-          <TextField fullWidth label="Tên sách" name="title" size="small" sx={{ mb: 2 }} value={formData.title} onChange={handleChange} />
+        <TextField defaultValue={book?.title} fullWidth label="Tên sách" size="small" sx={{ mb: 2 }} />
+        <TextField fullWidth label="Tên sách" name="title" size="small" sx={{ mb: 2 }} value={formData.title} onChange={handleChange} />
         <TextField fullWidth label="Mô tả chi tiết" name="description" size="small" sx={{ mb: 2 }} multiline rows={4} value={formData.description} onChange={handleChange} />
         <TextField fullWidth label="SKU" name="sku" size="small" sx={{ mb: 2 }} value={formData.sku} onChange={handleChange} />
         <TextField fullWidth label="Giá" name="price" size="small" type="number" sx={{ mb: 2 }} value={formData.price} onChange={handleChange} />
         <TextField fullWidth label="Giá Sale" name="sale_price" size="small" type="number" sx={{ mb: 2 }} value={formData.sale_price} onChange={handleChange} />
-        <TextField fullWidth label="ISBN" name="ISBN" size="small" sx={{ mb: 2 }} value={formData.ISBN} onChange={handleChange} />
+        <TextField fullWidth label="Size" name="size" size="small" sx={{ mb: 2 }} value={formData.size} onChange={handleChange} />
         <TextField fullWidth label="Số lượng" name="stock_quantity" size="small" type="number" sx={{ mb: 2 }} value={formData.stock_quantity} onChange={handleChange} />
         <TextField fullWidth label="Số trang" name="page_count" size="small" type="number" sx={{ mb: 2 }} value={formData.page_count} onChange={handleChange} />
         <TextField fullWidth label="Loại" name="cover_type" size="small" sx={{ mb: 2 }} value={formData.cover_type} onChange={handleChange} />
-        <TextField fullWidth label="Ngày phát hành" name="publication_date" size="small" type="date" sx={{ mb: 2 }} InputLabelProps={{ shrink: true }} value={formData.publication_date? new Date(formData.publication_date).toISOString().split("T")[0]: ""} onChange={handleDateChange} />
-        
+        <TextField fullWidth label="Ngày phát hành" name="publication_date" size="small" type="date" sx={{ mb: 2 }} InputLabelProps={{ shrink: true }} value={formData.publication_date ? new Date(formData.publication_date).toISOString().split("T")[0] : ""} onChange={handleDateChange} />
+
         <Typography fontWeight="bold" mb={2}>Categories </Typography>
         <Autocomplete
           multiple sx={{ mb: 2 }}
@@ -260,7 +260,7 @@ const ProductEditPage = () => {
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
               <Chip label={option.name} />
-            </li>)}/>
+            </li>)} />
 
         <Typography fontWeight="bold" mb={2}> Authors </Typography>
         <Autocomplete
@@ -276,7 +276,7 @@ const ProductEditPage = () => {
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
               <Chip label={option.name} />
-            </li>)}/>
+            </li>)} />
 
         <Typography fontWeight="bold" mb={2}> Publishers </Typography>
         <Autocomplete
@@ -292,8 +292,8 @@ const ProductEditPage = () => {
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
               <Chip label={option.name} />
-            </li>)}/>
-        
+            </li>)} />
+
         <Typography fontWeight="bold" mb={2}> Tags</Typography>
         <Autocomplete
           multiple sx={{ mb: 2 }}
@@ -308,44 +308,44 @@ const ProductEditPage = () => {
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
               <Chip label={option.name} />
-            </li>)}/>
-        
-        <Box padding={3} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
-              <Typography fontWeight="bold" mb={2}> Upload & Preview ảnh </Typography>
-              <Button variant="contained" component="label" sx={{ mb: 2 }}> Chọn ảnh
-                <input type="file" accept="image/*" hidden multiple />
-              </Button>
+            </li>)} />
 
-                {images && images.length > 0 ? (
-                  <Swiper
-                    modules={[Navigation, Pagination]}
-                    navigation
-                    pagination={{ clickable: true }}
-                    spaceBetween={10}
-                    slidesPerView={3}
-                    style={{ width: "100%", height: "300px" }} >
-                    {images.map((img: any) => (
-                      <SwiperSlide key={img.id}>
-                        <Box
-                          component="img"
-                          src={img.image_url}
-                          alt={book?.title}
-                          sx={{ width: "100%", height: "100%", objectFit: "cover",borderRadius: 2, border: "1px solid #e5e7eb", }} />
-                        <IconButton
-                          size="small"
-                          sx={{ position: "absolute", top: 5,right: 5, bgcolor: "rgba(0,0,0,0.5)", color: "white", "&:hover": { bgcolor: "rgba(0,0,0,0.7)" },}}
-                          onClick={() => handleRemoveImage(img.id)} >
-                          <Delete fontSize="small" />
-                      </IconButton>
-                      <IconButton size="small"
-                        sx={{ position: "absolute", top: 5, left: 5,  bgcolor: "rgba(0,0,0,0.5)",  color: "white",  "&:hover": { bgcolor: "rgba(0,0,0,0.7)" },}}
-                        onClick={() => handleSetThumbnail(img.id)}>
-                        {img.is_thumbnail ? <Star /> : <StarBorder />}
-                      </IconButton>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                ) : ( <Typography variant="body2" color="text.secondary"> Chưa có hình ảnh nào </Typography>)}
+        <Box padding={3} border="1px solid #e5e7eb" borderRadius={2} bgcolor="white">
+          <Typography fontWeight="bold" mb={2}> Upload & Preview ảnh </Typography>
+          <Button variant="contained" component="label" sx={{ mb: 2 }}> Chọn ảnh
+            <input type="file" accept="image/*" hidden multiple />
+          </Button>
+
+          {images && images.length > 0 ? (
+            <Swiper
+              modules={[Navigation, Pagination]}
+              navigation
+              pagination={{ clickable: true }}
+              spaceBetween={10}
+              slidesPerView={3}
+              style={{ width: "100%", height: "300px" }} >
+              {images.map((img: any) => (
+                <SwiperSlide key={img.id}>
+                  <Box
+                    component="img"
+                    src={img.image_url}
+                    alt={book?.title}
+                    sx={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 2, border: "1px solid #e5e7eb", }} />
+                  <IconButton
+                    size="small"
+                    sx={{ position: "absolute", top: 5, right: 5, bgcolor: "rgba(0,0,0,0.5)", color: "white", "&:hover": { bgcolor: "rgba(0,0,0,0.7)" }, }}
+                    onClick={() => handleRemoveImage(img.id)} >
+                    <Delete fontSize="small" />
+                  </IconButton>
+                  <IconButton size="small"
+                    sx={{ position: "absolute", top: 5, left: 5, bgcolor: "rgba(0,0,0,0.5)", color: "white", "&:hover": { bgcolor: "rgba(0,0,0,0.7)" }, }}
+                    onClick={() => handleSetThumbnail(img.id)}>
+                    {img.is_thumbnail ? <Star /> : <StarBorder />}
+                  </IconButton>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (<Typography variant="body2" color="text.secondary"> Chưa có hình ảnh nào </Typography>)}
         </Box>
         <Box mt={2} display="flex" gap={2}>
           <Button variant="contained" onClick={handleSave}>Lưu</Button>

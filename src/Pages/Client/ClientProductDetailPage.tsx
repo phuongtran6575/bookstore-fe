@@ -4,7 +4,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useBookAuthorRelationship, useBookCategoryRelationship, useBookTagRelationship, useGetBookbyId, useGetImagesBook, useGetListPublishersBook } from '../../api/hook/useBook';
+import { useBookAuthorRelationship, useBookCategoryRelationship, useBookTagRelationship, useGetBookbyId, useGetImagesBook, useGetListBooks, useGetListPublishersBook } from '../../api/hook/useBook';
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ClientProductDetailTab from "../../Component/Client/ClientProductDetailTab";
@@ -22,6 +22,8 @@ const ClientProductDetailPage = () => {
   const { data: images } = useGetImagesBook(id || "");
   const { data: categories } = useGetCategoriesByBookId(id || "");
   const { data: tags } = useGetTagsByBookId(id || "");
+  const { data: books } = useGetListBooks()
+
 
   const defaultImage = images?.find((img: any) => img.is_thumbnail) || images?.[0];
   const [selectedImage, setSelectedImage] = useState<any>(null);
@@ -159,7 +161,7 @@ const ClientProductDetailPage = () => {
           </Box>
         </Box>
         <ClientProductDetailTab book={book} authors={authors || []} publishers={publishers || []} />
-        <SwiperListProduct />
+        <SwiperListProduct products={books || []} />
       </Box>
     </Box>
   );

@@ -48,6 +48,10 @@ export const bookpublisherService = {
   AddPublisherToBook : async (data: { product_id: string; publisher_id: string; edition?: string; year?: string; isbn?: string}) =>{
     const res = await axiosAPI.post("/bookpublishers", data )
     return res.data
+  },
+  UpdatePublisherBook: async (data: { product_id: string; publisher_id: string; edition?: string; year?: string; isbn?: string} ) =>{
+    const res = await axiosAPI.put("/bookpublishers", data)
+    return res.data
   }
 }
 

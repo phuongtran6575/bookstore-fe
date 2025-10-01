@@ -8,47 +8,59 @@ import {
     TextField,
     Checkbox,
     FormControlLabel,
-    Divider,
     Button,
     FormGroup,
+    Radio,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
-import { useAuthorCrud } from '../../api/hook/useUltility';
+import { useAuthorCrud, usePublisherCrud } from '../../api/hook/useUltility';
+import StarIcon from '@mui/icons-material/Star';
 
 
 
 
 const CategorySidebar = () => {
     const { useGetListAuthors } = useAuthorCrud();
-    const {
-        data: authors = [],
-        isLoading: isLoadingAuthors,
-        error: errorAuthors,
-    } = useGetListAuthors();
+    const { useGetListPublishers } = usePublisherCrud();
+
+    const { data: authors = [] } = useGetListAuthors();
+    const { data: publishers = [] } = useGetListPublishers();
 
     const [price, setPrice] = useState<number[]>([0, 500000]);
+
     const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
+    const [selectedPublishers, setSelectedPublishers] = useState<string[]>([]);
+
     const [search, setSearch] = useState("");
-    const [showAll, setShowAll] = useState(false);
+
+    const [showAllAuthors, setShowAllAuthors] = useState(false);
+    const [showAllPublishers, setShowAllPublishers] = useState(false);
+
+    const [selectedRating, setSelectedRating] = useState<number | null>(null);
 
     const handlePriceChange = (_: Event, newValue: number | number[]) => {
         setPrice(newValue as number[]);
     };
 
-    const handleAuthorToggle = (authorId: string) => {
-        setSelectedAuthors((prev) =>
-            prev.includes(authorId)
-                ? prev.filter((a) => a !== authorId)
-                : [...prev, authorId]
+    // toggle chung cho author / publisher
+    const handleFilterToggle = (
+        id: string,
+        selected: string[],
+        setSelected: React.Dispatch<React.SetStateAction<string[]>>
+    ) => {
+        setSelected((prev) =>
+            prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
         );
     };
 
-    const filteredAuthors = authors.filter((a) =>
-        a.name.toLowerCase().includes(search.toLowerCase())
-    );
+    const filteredModels = (models: any[]) =>
+        models.filter((a: any) =>
+            a.name.toLowerCase().includes(search.toLowerCase())
+        );
 
-    const visibleAuthors = showAll ? filteredAuthors : filteredAuthors.slice(0, 6);
+    const visibleFilter = (models: any[], showAll: boolean) =>
+        showAll ? filteredModels(models) : filteredModels(models).slice(0, 6);
 
     return (
         <Box sx={{ width: 280, p: 2, borderRight: "1px solid #eee" }}>
@@ -58,16 +70,20 @@ const CategorySidebar = () => {
             </Typography>
 
             {/* Bộ lọc + Xóa tất cả */}
-            <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                mb={2}
-            >
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                 <Typography variant="subtitle1" fontWeight="bold">
                     Bộ lọc
                 </Typography>
-                <Button size="small" color="warning" onClick={() => setSelectedAuthors([])}>
+                <Button
+                    size="small"
+                    color="warning"
+                    onClick={() => {
+                        setSelectedAuthors([]);
+                        setSelectedPublishers([]);
+                        setSelectedRating(null);
+                        setPrice([0, 500000]);
+                    }}
+                >
                     Xóa tất cả
                 </Button>
             </Box>
@@ -87,12 +103,8 @@ const CategorySidebar = () => {
                         step={10000}
                     />
                     <Box display="flex" justifyContent="space-between">
-                        <Typography variant="body2">
-                            {price[0].toLocaleString()}đ
-                        </Typography>
-                        <Typography variant="body2">
-                            {price[1].toLocaleString()}đ
-                        </Typography>
+                        <Typography variant="body2">{price[0].toLocaleString()}đ</Typography>
+                        <Typography variant="body2">{price[1].toLocaleString()}đ</Typography>
                     </Box>
                 </AccordionDetails>
             </Accordion>
@@ -112,38 +124,76 @@ const CategorySidebar = () => {
                         sx={{ mb: 1 }}
                     />
                     <FormGroup>
-                        {visibleAuthors.map((author) => (
+                        {visibleFilter(authors, showAllAuthors).map((author) => (
                             <FormControlLabel
                                 key={author.id}
                                 control={
                                     <Checkbox
                                         checked={selectedAuthors.includes(author.id)}
-                                        onChange={() => handleAuthorToggle(author.id)}
+                                        onChange={() =>
+                                            handleFilterToggle(author.id, selectedAuthors, setSelectedAuthors)
+                                        }
                                     />
                                 }
                                 label={author.name}
                             />
                         ))}
                     </FormGroup>
-                    {filteredAuthors.length > 6 && (
+                    {filteredModels(authors).length > 6 && (
                         <Button
                             size="small"
-                            onClick={() => setShowAll(!showAll)}
+                            onClick={() => setShowAllAuthors(!showAllAuthors)}
                             sx={{ mt: 1 }}
                         >
-                            {showAll ? "Thu gọn" : "Xem thêm"}
+                            {showAllAuthors ? "Thu gọn" : "Xem thêm"}
                         </Button>
                     )}
                 </AccordionDetails>
             </Accordion>
 
             {/* Nhà xuất bản */}
-            <Accordion>
+            <Accordion defaultExpanded>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography fontWeight="bold">Nhà xuất bản</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Typography variant="body2">Danh sách NXB...</Typography>
+                    <TextField
+                        size="small"
+                        placeholder="Tìm nhà xuất bản..."
+                        fullWidth
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        sx={{ mb: 1 }}
+                    />
+                    <FormGroup>
+                        {visibleFilter(publishers, showAllPublishers).map((publisher) => (
+                            <FormControlLabel
+                                key={publisher.id}
+                                control={
+                                    <Checkbox
+                                        checked={selectedPublishers.includes(publisher.id)}
+                                        onChange={() =>
+                                            handleFilterToggle(
+                                                publisher.id,
+                                                selectedPublishers,
+                                                setSelectedPublishers
+                                            )
+                                        }
+                                    />
+                                }
+                                label={publisher.name}
+                            />
+                        ))}
+                    </FormGroup>
+                    {filteredModels(publishers).length > 6 && (
+                        <Button
+                            size="small"
+                            onClick={() => setShowAllPublishers(!showAllPublishers)}
+                            sx={{ mt: 1 }}
+                        >
+                            {showAllPublishers ? "Thu gọn" : "Xem thêm"}
+                        </Button>
+                    )}
                 </AccordionDetails>
             </Accordion>
 
@@ -153,7 +203,34 @@ const CategorySidebar = () => {
                     <Typography fontWeight="bold">Đánh giá</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Typography variant="body2">Các mức sao...</Typography>
+                    {[5, 4, 3, 2, 1].map((rating) => (
+                        <Box
+                            key={rating}
+                            display="flex"
+                            alignItems="center"
+                            sx={{ cursor: "pointer", mb: 1 }}
+                            onClick={() => setSelectedRating(rating)}
+                        >
+                            <Radio
+                                checked={selectedRating === rating}
+                                onChange={() => setSelectedRating(rating)}
+                                value={rating}
+                                size="small"
+                            />
+                            {Array.from({ length: 5 }, (_, i) => (
+                                <StarIcon
+                                    key={i}
+                                    sx={{
+                                        color: i < rating ? "gold" : "#ccc",
+                                        fontSize: 20,
+                                    }}
+                                />
+                            ))}
+                            <Typography variant="body2" sx={{ ml: 1 }}>
+                                từ {rating} sao
+                            </Typography>
+                        </Box>
+                    ))}
                 </AccordionDetails>
             </Accordion>
         </Box>

@@ -88,6 +88,13 @@ export const useAddPublisherToBook = () =>{
     onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["bookpublishers"] }); }
   })
 }
+export const useUpdatePublisherToBook = () =>{
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { product_id: string; publisher_id: string; edition?: string; year?: string; isbn?: string}) => bookpublisherService.UpdatePublisherBook(data),
+    onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["bookpublishers"] }); }
+  })
+}
 
 export const useGetListPublishersBook = (book_id: string) => {
   return useQuery({
@@ -112,6 +119,7 @@ export const useAddImageToBook = () =>{
         onSuccess: () => {queryClient.invalidateQueries({ queryKey: ["bookimages"] }); },
     })
 }
+
 
 export const useGetImagesBook = (book_id: string) => {
   return useQuery({

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button, Autocomplete, Chip, IconButton } from "@mui/material";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useBookAuthorRelationship, useBookCategoryRelationship, useBookTagRelationship, useGetBookbyId, useGetImagesBook, useUpdateBook, useAddImageToBook, useRemoveImageFromBook, useSetThumbnailImage, useAddPublisherToBook, useRemovePublisherFromBook, useGetListPublishersBook } from '../../../api/hook/useBook';
+import { useBookAuthorRelationship, useBookCategoryRelationship, useBookTagRelationship, useGetBookbyId, useGetImagesBook, useUpdateBook, useAddImageToBook, useRemoveImageFromBook, useSetThumbnailImage, useAddPublisherToBook, useRemovePublisherFromBook, useGetListPublishersBook, useUpdatePublisherToBook } from '../../../api/hook/useBook';
 import { useAuthorCrud, useCategoryCrud, usePublisherCrud, useTagCrud } from "../../../api/hook/useUltility";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -29,6 +29,7 @@ const ProductEditPage = () => {
   const addCategory = useAddCategoryToBook()
   const removeCategory = useRemoveCategoryFromBook()
   const addPublisher = useAddPublisherToBook()
+  const updatePublisher = useUpdatePublisherToBook()
   const removePublisher = useRemovePublisherFromBook()
   const addTag = useAddTagToBook()
   const removeTag = useRemoveTagFromBook()
@@ -203,6 +204,20 @@ const ProductEditPage = () => {
 
     setSelectedPublishers(value);
   };
+  const handlePublisherFieldChange = (publisherId: string, field: string, value: any) => {
+    setSelectedPublishers(prev =>
+      prev.map(pub =>
+        pub.id === publisherId ? { ...pub, [field]: value } : pub
+      )
+    );
+
+    // gọi API update (debounce thì càng tốt)
+    updatePublisher.mutate({
+      product_id: id!,
+      publisher_id: publisherId,
+      [field]: value
+    });
+  };
 
   const handleTagChange = (_e: any, value: any[]) => {
     const added = value.filter(
@@ -293,6 +308,32 @@ const ProductEditPage = () => {
             <li {...props} key={option.id}>
               <Chip label={option.name} />
             </li>)} />
+        {/* 👇 render các field phụ cho publisher đã chọn */}
+        {selectedPublishers.map(pub => (
+          <Box key={pub.id} sx={{ border: "1px solid #ddd", p: 2, mb: 2, borderRadius: 2 }}>
+            <Typography fontWeight="bold" mb={1}>{pub.name}</Typography>
+            <TextField
+              label="ISBN"
+              size="small"
+              sx={{ mr: 2 }}
+              value={pub.isbn || ""}
+              onChange={(e) => handlePublisherFieldChange(pub.id, "isbn", e.target.value)}
+            />
+            <TextField
+              label="Edition"
+              size="small"
+              sx={{ mr: 2 }}
+              value={pub.edition || ""}
+              onChange={(e) => handlePublisherFieldChange(pub.id, "edition", e.target.value)}
+            />
+            <TextField
+              label="Year"
+              size="small"
+              value={pub.year || ""}
+              onChange={(e) => handlePublisherFieldChange(pub.id, "year", Number(e.target.value))}
+            />
+          </Box>
+        ))}
 
         <Typography fontWeight="bold" mb={2}> Tags</Typography>
         <Autocomplete

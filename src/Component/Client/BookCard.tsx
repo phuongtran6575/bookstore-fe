@@ -1,10 +1,9 @@
 import { Card, CardContent, CardMedia, Box, Typography, Button, Rating } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useGetImagesBook } from "../../api/hook/useBook";
+import { useBookAuthorRelationship, useGetImagesBook } from "../../api/hook/useBook";
 
 type ProductCardProps = {
     product: any;
-    author?: string
     oldPrice?: string;
     discount?: string;
     rating?: number;
@@ -14,18 +13,22 @@ type ProductCardProps = {
 
 const BookCard = ({
     product,
-    author,
     oldPrice,
     discount,
     rating,
     reviews,
     badge,
 }: ProductCardProps) => {
+
+    const { useGetAuthorsByBookId } = useBookAuthorRelationship()
+
     const { data: images, isLoading: isLoadingImages, error: errorImages } = useGetImagesBook(product.id)
-    if (isLoadingImages) return <p>Loading Images</p>
-    if (errorImages) return <p>error Images</p>
+    const { data: authors = [], isLoading: isLoadingAuthors, error: errorAuthors } = useGetAuthorsByBookId(product.id)
+    if (isLoadingImages || isLoadingAuthors) return <p>Loading</p>
+    if (errorImages || errorAuthors) return <p>error</p>
     const defaultImage = images?.find((img: any) => img.is_thumbnail) || images?.[0];
-    console.log(defaultImage)
+    const authordefault = authors?.[0]
+    console.log(authordefault)
     return (
         <Card
             sx={{
@@ -118,12 +121,18 @@ const BookCard = ({
                         textDecoration: "none",
                         color: "inherit",
                         "&:hover": { color: "primary.main" },
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,   // giới hạn 2 dòng
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        minHeight: "48px",    // giữ chỗ để tất cả card cân bằng
                     }}
                 >
                     {product.title}
                 </Typography>
-                {author && (<Typography variant="body2" color="text.secondary">
-                    {author}
+                {authordefault?.name && (<Typography variant="body2" color="text.secondary">
+                    {authordefault.name}
                 </Typography>)}
                 <Box display="flex" alignItems="center" mt={1}>
                     <Rating value={rating} precision={0.5} readOnly size="small" />

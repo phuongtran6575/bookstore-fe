@@ -1,3 +1,9 @@
+export interface Pagination<T> {
+  total: number;
+  page: number;
+  size: number;
+  items: T[];
+}
 export interface Book{
     id: string
     title: string

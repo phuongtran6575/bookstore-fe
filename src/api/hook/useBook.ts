@@ -4,10 +4,23 @@ import { bookauthorService, bookcategoryService, bookpublisherService, bookServi
 import type { Book } from "../../core/Types";
 import { useRelationship } from "./useBaseHook";
 
-export const useGetListBooks = () => {
+export const useFilter = (
+  filters: {
+    authorIds?: string[];
+    publisherIds?: string[];
+    categoryIds?: string[];
+  } = {}
+) => {
   return useQuery({
-    queryKey: ["books"],
-    queryFn: bookService.getAll,
+    queryKey: ["books", filters], 
+    queryFn: () => bookService.filter(filters),
+  });
+};
+
+export const useGetListBooks = (page: number, size: number) => {
+  return useQuery({
+    queryKey: ["books", page, size],
+    queryFn: () => bookService.getAll(page, size),
   });
 };
 

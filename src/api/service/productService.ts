@@ -1,11 +1,12 @@
-import type { Book } from "../../core/Types";
+import type { Book, Pagination } from "../../core/Types";
 import { axiosAPI, createRelationshipService } from "./baseService";
 
 
 export const bookService = {
-  getAll: async (): Promise<Book[]> => {
-    const res = await axiosAPI.get<Book[]>("/books");
-    return res.data;   // 👈 phải .data
+  
+  getAll: async (page: number, pageSize: number): Promise<Pagination<Book>> => {
+    const res = await axiosAPI.get<Pagination<Book>>(`/books?page=${page}&page_size=${pageSize}`);
+    return res.data; 
   },
 
   getById: async (id: string): Promise<Book> => {
@@ -25,6 +26,19 @@ export const bookService = {
 
   delete: async (id: string): Promise<void> => {
     await axiosAPI.delete(`/books/${id}`);
+  },
+  filter: async (filters: {authorIds?: string[]; publisherIds?: string[]; categoryIds?: string[]; }) => {
+      const params = new URLSearchParams();
+
+      filters.authorIds?.forEach((id) => params.append("author_ids", id));
+      filters.publisherIds?.forEach((id) => params.append("publisher_ids", id));
+      filters.categoryIds?.forEach((id) => params.append("category_ids", id));
+
+      const query = params.toString();
+      const url = query ? `/books/filter_book?${query}` : `/books/filter_book`;
+
+      const res = await axiosAPI.get<Book[]>(url);
+      return res.data;
   },
 };
 

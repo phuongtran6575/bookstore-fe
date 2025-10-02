@@ -6,17 +6,19 @@ import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const navigate = useNavigate()
-  const handleClick = (id: string) =>{
+  const handleClick = (id: string) => {
     navigate(`product/${id}`)
   }
-  const {data: books = []} = useGetListBooks()
+  const { data: response } = useGetListBooks(1, 10)
+  const books = response?.items ?? []
+
   return (
     <Box>
-        <BannerHomePage/>
-        {books.map(book => (
-            <Button onClick={() => handleClick(book.id)} key={book.id}>{book.title}</Button>
-        ))}
-       
+      <BannerHomePage />
+      {books.map(book => (
+        <Button onClick={() => handleClick(book.id)} key={book.id}>{book.title}</Button>
+      ))}
+
     </Box>
   );
 };

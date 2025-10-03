@@ -66,9 +66,6 @@ const CategorySidebar = ({ filters, setFilters }: SidebarProps) => {
 
     return (
         <Box sx={{ width: 280, p: 2, borderRight: "1px solid #eee" }}>
-            <Typography variant="h5" fontWeight="bold" gutterBottom>
-                Văn Học
-            </Typography>
 
             {/* Reset all */}
             <Button
@@ -110,18 +107,37 @@ const CategorySidebar = ({ filters, setFilters }: SidebarProps) => {
                     <Typography fontWeight="bold">Tác giả</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    {visibleFilter(authors, showAllAuthors).map((author) => (
-                        <FormControlLabel
-                            key={author.id}
-                            control={
-                                <Checkbox
-                                    checked={filters.authorIds.includes(author.id)}
-                                    onChange={() => handleFilterToggle(author.id, "authorIds")}
-                                />
-                            }
-                            label={author.name}
-                        />
-                    ))}
+                    <TextField
+                        size="small"
+                        placeholder="Tìm tác giả..."
+                        fullWidth
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        sx={{ mb: 1 }}
+                    />
+                    <FormGroup>
+                        {visibleFilter(authors, showAllAuthors).map((author) => (
+                            <FormControlLabel
+                                key={author.id}
+                                control={
+                                    <Checkbox
+                                        checked={filters.authorIds.includes(author.id)}
+                                        onChange={() => handleFilterToggle(author.id, "authorIds")}
+                                    />
+                                }
+                                label={author.name}
+                            />
+                        ))}
+                    </FormGroup>
+                    {/* Nút xem thêm / thu gọn */}
+                    {filteredModels(authors).length > 6 && (
+                        <Button
+                            size="small"
+                            onClick={() => setShowAllAuthors((prev) => !prev)}
+                        >
+                            {showAllAuthors ? "Thu gọn" : "Xem thêm"}
+                        </Button>
+                    )}
                 </AccordionDetails>
             </Accordion>
 
@@ -131,22 +147,74 @@ const CategorySidebar = ({ filters, setFilters }: SidebarProps) => {
                     <Typography fontWeight="bold">Nhà xuất bản</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    {visibleFilter(publishers, showAllPublishers).map((publisher) => (
-                        <FormControlLabel
-                            key={publisher.id}
-                            control={
-                                <Checkbox
-                                    checked={filters.publisherIds.includes(publisher.id)}
-                                    onChange={() =>
-                                        handleFilterToggle(publisher.id, "publisherIds")
-                                    }
+                    <TextField
+                        size="small"
+                        placeholder="Tìm tác giả..."
+                        fullWidth
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        sx={{ mb: 1 }}
+                    />
+                    <FormGroup>
+                        {visibleFilter(publishers, showAllPublishers).map((publisher) => (
+                            <FormControlLabel
+                                key={publisher.id}
+                                control={
+                                    <Checkbox
+                                        checked={filters.publisherIds.includes(publisher.id)}
+                                        onChange={() =>
+                                            handleFilterToggle(publisher.id, "publisherIds")
+                                        }
+                                    />
+                                }
+                                label={publisher.name}
+                            />
+                        ))}
+                    </FormGroup>
+                    {/* Nút xem thêm / thu gọn */}
+                    {filteredModels(publishers).length > 6 && (
+                        <Button
+                            size="small"
+                            onClick={() => setShowAllPublishers((prev) => !prev)}
+                        >
+                            {showAllPublishers ? "Thu gọn" : "Xem thêm"}
+                        </Button>
+                    )}
+                </AccordionDetails>
+            </Accordion>
+            <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography fontWeight="bold">Đánh giá</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    {[5, 4, 3, 2, 1].map((rating) => (
+                        <Box
+                            key={rating}
+                            display="flex"
+                            alignItems="center"
+                            sx={{ cursor: "pointer", mb: 1 }}
+                        >
+                            <Radio
+                                value={rating}
+                                size="small"
+                            />
+                            {Array.from({ length: 5 }, (_, i) => (
+                                <StarIcon
+                                    key={i}
+                                    sx={{
+                                        color: i < rating ? "gold" : "#ccc",
+                                        fontSize: 20,
+                                    }}
                                 />
-                            }
-                            label={publisher.name}
-                        />
+                            ))}
+                            <Typography variant="body2" sx={{ ml: 1 }}>
+                                từ {rating} sao
+                            </Typography>
+                        </Box>
                     ))}
                 </AccordionDetails>
             </Accordion>
+
         </Box>
     );
 };

@@ -57,6 +57,10 @@ const Header = () => {
       setAnchorEl(event.currentTarget);
     }
   };
+
+  const handleCartClick = () => {
+    navigate("/cart");
+  };
   const handleAccountClose = () => setAnchorEl(null);
 
   const handleCategoryEnter = () => setCategoryMenuOpen(true);
@@ -132,7 +136,7 @@ const Header = () => {
 
         {/* Cart + User + Menu */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <IconButton>
+          <IconButton onClick={handleCartClick}>
             <ShoppingCart />
           </IconButton>
 

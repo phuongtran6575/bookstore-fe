@@ -1,7 +1,7 @@
 import { Box, Breadcrumbs, Typography } from "@mui/material";
 import CategorySidebar from "../../Component/Client/CategorySidebar";
 import ListProductByCategory from "../../Component/Client/ListProductByCategory";
-import { useFilter, useGetListBooks } from "../../api/hook/useBook";
+import { useGetListBooks } from "../../api/hook/useBook";
 import { useState } from "react";
 
 const CategoryPage = () => {
@@ -13,11 +13,22 @@ const CategoryPage = () => {
         price: [0, 500000],
     });
 
-    const { data: books, isLoading: isLoadingBooks } = useFilter({
+    const [page, setPage] = useState(1);
+    const pageSize = 5;
+
+    const { data: response, isLoading: isLoadingBooks, error } = useGetListBooks(page, pageSize, {
         authorIds: filters.authorIds,
         publisherIds: filters.publisherIds,
         categoryIds: filters.categoryIds,
     });
+
+    const books = response?.items ?? [];
+    const total = response?.total ?? 0;
+    const totalPages = Math.ceil(total / pageSize);
+
+    const handlePagination = (_event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
 
     return (
         <Box>
@@ -48,7 +59,7 @@ const CategoryPage = () => {
                     {isLoadingBooks ? (
                         <Typography>Đang tải...</Typography>
                     ) : (
-                        <ListProductByCategory products={books || []} />
+                        <ListProductByCategory products={books} totalPages={totalPages} page={page} handlePagination={handlePagination} />
                     )}
                 </Box>
             </Box>

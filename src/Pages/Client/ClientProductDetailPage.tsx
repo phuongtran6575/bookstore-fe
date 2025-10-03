@@ -22,7 +22,6 @@ const ClientProductDetailPage = () => {
   const { data: images } = useGetImagesBook(id || "");
   const { data: categories } = useGetCategoriesByBookId(id || "");
   const { data: tags } = useGetTagsByBookId(id || "");
-  const { data: books } = useGetListBooks()
 
 
   const defaultImage = images?.find((img: any) => img.is_thumbnail) || images?.[0];
@@ -119,7 +118,7 @@ const ClientProductDetailPage = () => {
 
             {/* Giá */}
             <Box>
-              <Typography variant="h6" color="error" fontWeight="bold"> 164.000 đ </Typography>
+              <Typography variant="h6" color="error" fontWeight="bold">{book?.price} </Typography>
               <Box display="flex" gap={2}>
                 <Typography sx={{ textDecoration: "line-through", color: "text.secondary" }}> 214.000 đ  </Typography>
                 <Typography color="error">-23%</Typography>
@@ -161,7 +160,6 @@ const ClientProductDetailPage = () => {
           </Box>
         </Box>
         <ClientProductDetailTab book={book} authors={authors || []} publishers={publishers || []} />
-        <SwiperListProduct products={books || []} />
       </Box>
     </Box>
   );

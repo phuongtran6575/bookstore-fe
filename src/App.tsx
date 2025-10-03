@@ -49,6 +49,8 @@ import CategoryEditPage from './Pages/Admin/Ultility/CategoryEditPage'
 import PublisherEditPage from './Pages/Admin/Ultility/PublisherEditPage'
 import TagEditPage from './Pages/Admin/Ultility/TagEditPage'
 import ClientProductDetailPage from './Pages/Client/ClientProductDetailPage'
+import ShoppingCartPage from './Pages/Client/ShoppingCartPage'
+import CheckoutPage from './Pages/Client/CheckoutPage'
 
 
 
@@ -63,6 +65,8 @@ function App() {
             <Route path='home' element={<HomePage />}></Route>
             <Route path='category' element={<CategoryPage />}></Route>
             <Route path='product/:id' element={<ClientProductDetailPage />}></Route>
+            <Route path='cart' element={<ShoppingCartPage />}></Route>
+            <Route path='checkout' element={<CheckoutPage />}></Route>
             <Route path='auth' element={<AuthLayout />}>
               <Route index element={<LoginPage />}></Route>
               <Route path='login' element={<LoginPage />}></Route>

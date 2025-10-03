@@ -4,11 +4,21 @@ import { axiosAPI, createRelationshipService } from "./baseService";
 
 export const bookService = {
   
-  getAll: async (page: number, pageSize: number): Promise<Pagination<Book>> => {
-    const res = await axiosAPI.get<Pagination<Book>>(`/books?page=${page}&page_size=${pageSize}`);
-    return res.data; 
-  },
+  getAll: async (filters: {authorIds?: string[]; publisherIds?: string[]; categoryIds?: string[]; },page: number, pageSize: number) => {
+      const params = new URLSearchParams();
 
+      filters.authorIds?.forEach((id) => params.append("author_ids", id));
+      filters.publisherIds?.forEach((id) => params.append("publisher_ids", id));
+      filters.categoryIds?.forEach((id) => params.append("category_ids", id));
+
+      const query = params.toString();
+      const url = query 
+  ? `/books?page=${page}&page_size=${pageSize}&${query}`
+  : `/books?page=${page}&page_size=${pageSize}`;
+
+      const res = await axiosAPI.get<Pagination<Book>>(url);
+      return res.data;
+  },
   getById: async (id: string): Promise<Book> => {
     const res = await axiosAPI.get<Book>(`/books/${id}`);
     return res.data;
@@ -27,19 +37,7 @@ export const bookService = {
   delete: async (id: string): Promise<void> => {
     await axiosAPI.delete(`/books/${id}`);
   },
-  filter: async (filters: {authorIds?: string[]; publisherIds?: string[]; categoryIds?: string[]; }) => {
-      const params = new URLSearchParams();
-
-      filters.authorIds?.forEach((id) => params.append("author_ids", id));
-      filters.publisherIds?.forEach((id) => params.append("publisher_ids", id));
-      filters.categoryIds?.forEach((id) => params.append("category_ids", id));
-
-      const query = params.toString();
-      const url = query ? `/books/filter_book?${query}` : `/books/filter_book`;
-
-      const res = await axiosAPI.get<Book[]>(url);
-      return res.data;
-  },
+  
 };
 
 export const bookcategoryService = createRelationshipService("bookcategories","product_id","category_id");

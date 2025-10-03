@@ -1,7 +1,6 @@
-import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
+import { Box, FormControl, MenuItem, Pagination, Select, Typography } from "@mui/material";
 import BookCard from "./BookCard";
 import Grid2 from '@mui/material/Grid';
-import type { Book } from "../../core/Types";
 
 
 type ListProductByCategoryProps = {
@@ -12,9 +11,12 @@ type ListProductByCategoryProps = {
     rating?: number;
     reviews?: number;
     badge?: string;
+    totalPages: number
+    page: number
+    handlePagination: (event: React.ChangeEvent<unknown>, value: number) => void;
 };
 
-const ListProductByCategory = ({ products, author, oldPrice, discount, rating, reviews, badge }: ListProductByCategoryProps) => {
+const ListProductByCategory = ({ products, author, oldPrice, discount, rating, reviews, badge, totalPages, page, handlePagination }: ListProductByCategoryProps) => {
     return (
         <Box>
             {/* Header */}
@@ -48,6 +50,15 @@ const ListProductByCategory = ({ products, author, oldPrice, discount, rating, r
                     </Grid2>
                 ))}
             </Grid2>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                <Pagination
+                    count={totalPages}
+                    page={page}
+                    onChange={handlePagination}
+                    color="primary"
+                    shape="rounded"
+                />
+            </Box>
         </Box>
     );
 };

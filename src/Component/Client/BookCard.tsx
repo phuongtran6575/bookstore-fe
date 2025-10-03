@@ -1,6 +1,7 @@
 import { Card, CardContent, CardMedia, Box, Typography, Button, Rating } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useBookAuthorRelationship, useGetImagesBook } from "../../api/hook/useBook";
+import { useCartStore } from "../../core/store/cartStore";
 
 type ProductCardProps = {
     product: any;
@@ -21,7 +22,7 @@ const BookCard = ({
 }: ProductCardProps) => {
 
     const { useGetAuthorsByBookId } = useBookAuthorRelationship()
-
+    const handleAddToCart = useCartStore((state) => state.addToCart);
     const { data: images, isLoading: isLoadingImages, error: errorImages } = useGetImagesBook(product.id)
     const { data: authors = [], isLoading: isLoadingAuthors, error: errorAuthors } = useGetAuthorsByBookId(product.id)
     if (isLoadingImages || isLoadingAuthors) return <p>Loading</p>
@@ -29,6 +30,7 @@ const BookCard = ({
     const defaultImage = images?.find((img: any) => img.is_thumbnail) || images?.[0];
     const authordefault = authors?.[0]
     console.log(authordefault)
+
     return (
         <Card
             sx={{
@@ -94,6 +96,12 @@ const BookCard = ({
                 )}
                 {/* Nút thêm giỏ (căn giữa card) */}
                 <Button
+                    onClick={() => handleAddToCart({
+                        id: product.id,
+                        title: product.title,
+                        price: product.price,
+                        image: defaultImage?.image_url || "",
+                    })}
                     variant="contained"
                     color="warning"
                     className="hover-btn"

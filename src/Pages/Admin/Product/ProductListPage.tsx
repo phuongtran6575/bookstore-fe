@@ -1,12 +1,12 @@
 import { Box, Button, IconButton, InputAdornment, Pagination, TextField, Typography } from '@mui/material'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid'
 import SearchIcon from "@mui/icons-material/Search";
-import { useGetListBooks, useDeleteBook } from '../../../api/hook/useBook';
+import { useDeleteBook, useGetListBooks } from '../../../api/hook/useBook';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { Link, useNavigate } from 'react-router-dom';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 const ProductListPage = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
@@ -19,10 +19,6 @@ const ProductListPage = () => {
   const totalPages = Math.ceil(total / pageSize);
   console.log(books)
   const deleteBook = useDeleteBook();
-
-
-
-
 
 
   if (isLoading) return <p>Loading books...</p>;

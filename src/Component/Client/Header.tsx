@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Typography, InputBase, IconButton, Divider, Drawer, List, ListItem, ListItemText, useMediaQuery, ListItemButton, Menu as MuiMenu, MenuItem, Paper, } from "@mui/material";
 import { MenuBook, Search, ShoppingCart, Person, Menu, ExpandMore, ExpandLess, } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";

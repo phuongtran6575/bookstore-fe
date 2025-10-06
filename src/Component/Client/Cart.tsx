@@ -16,7 +16,9 @@ const Cart = ({ books, increaseQuantity, decreaseQuantity, removeFromCart }: Car
     return (
         <Box sx={{ p: 1, bgcolor: "#f9fbfd", minHeight: "100vh" }}>
             {/* Tiêu đề */}
-
+            <Typography variant="h5" mb={2} >
+                Giỏ hàng của bạn
+            </Typography>
             <Card sx={{ p: 1, borderRadius: 3, boxShadow: 1, maxWidth: 800, bgcolor: "white", }} >
                 <Typography variant="body1" fontWeight="500" mb={2}>hiện có {books.length} sản phẩm </Typography>
                 {books.map((book) => (

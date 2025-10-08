@@ -1,8 +1,5 @@
 import { Box, Typography, TextField, RadioGroup, FormControlLabel, Radio, Paper, Button, Checkbox } from "@mui/material";
-import { useReadMe } from "../../api/hook/useAuth";
-import { useGetAddrressesUSer } from "../../api/hook/useUser";
-import { useCheckout } from "../../api/hook/useOrder";
-import { useState } from "react";
+
 
 
 
@@ -91,7 +88,7 @@ const Checkout = ({
                 <Typography variant="h6" gutterBottom>3. Phương thức thanh toán</Typography>
                 <RadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
                     <FormControlLabel value="COD" control={<Radio />} label="Thanh toán khi nhận hàng (COD)" />
-                    <FormControlLabel value="BANK" control={<Radio />} label="Chuyển khoản ngân hàng" />
+                    <FormControlLabel value="STRIPE" control={<Radio />} label="Thanh toán online (Stripe)" />
                 </RadioGroup>
             </Paper>
         </Box>
